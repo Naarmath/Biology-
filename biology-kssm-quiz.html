@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biology KSSM Quiz — Form 4 &amp; 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --indigo:#10203A; --indigo-2:#1B3055;
+  --paper:#F5EEE1; --paper-2:#EFE5D3;
+  --ink:#1B1B18; --muted:#6E6A5F;
+  --gold:#B8862B; --red:#A32A32; --green:#2F6B4F;
+  --rule:#D8CBB4;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--indigo);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;
+  font-size:16px;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:760px;margin:0 auto;padding:0 0 70px}
+
+header{background:var(--indigo);color:var(--paper);padding:22px 20px 0;border-bottom:1px solid rgba(245,238,225,.14)}
+h1{font-family:Bitter,Georgia,serif;font-weight:700;font-size:23px;line-height:1.2;margin:0 0 3px;letter-spacing:-.01em}
+.sub{font-size:13px;color:#A9B6CB;margin:0 0 16px}
+.tabs{display:flex}
+.tab{flex:1;background:none;border:none;border-bottom:3px solid transparent;color:#93A2BA;
+  font-family:inherit;font-size:14.5px;font-weight:500;padding:11px 6px;cursor:pointer}
+.tab.on{color:var(--paper);border-bottom-color:var(--gold)}
+.tab:focus-visible{outline:2px solid var(--gold);outline-offset:-3px}
+.tab.lock,.mode.lock{opacity:.35;cursor:not-allowed}
+
+/* sticky exam bar */
+.exambar{position:sticky;top:0;z-index:30;background:var(--indigo);color:var(--paper);
+  display:none;align-items:center;justify-content:space-between;gap:12px;
+  padding:9px 18px;border-bottom:1px solid rgba(245,238,225,.2);font-size:13px}
+.exambar.on{display:flex}
+.clock{font-family:Bitter,serif;font-weight:700;font-size:21px;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.clock.warn{color:#E7A33C}
+.clock.crit{color:#E8767C}
+.exambar .lbl{color:#A9B6CB}
+.exambar button{background:none;border:1px solid rgba(245,238,225,.4);color:var(--paper);
+  font-family:inherit;font-size:13px;padding:6px 11px;border-radius:2px;cursor:pointer}
+.exambar button:hover{background:rgba(245,238,225,.12)}
+
+.sheet{background:var(--paper);padding:22px 20px 26px 34px;position:relative;min-height:60vh}
+.sheet::before{content:"";position:absolute;left:24px;top:0;bottom:0;width:1.5px;background:rgba(163,42,50,.38)}
+
+.modes{display:flex;gap:0;border:1px solid var(--rule);margin-bottom:18px}
+.mode{flex:1;background:#FBF7EE;border:none;border-right:1px solid var(--rule);
+  font-family:inherit;font-size:13.5px;font-weight:500;color:var(--muted);padding:10px 8px;cursor:pointer}
+.mode:last-child{border-right:none}
+.mode.on{background:var(--indigo);color:var(--paper)}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px}
+.field{flex:1 1 140px;min-width:0}
+label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:4px}
+select,button.act,input.mk{width:100%;font-family:inherit;font-size:14.5px;padding:9px 10px;
+  border:1px solid var(--rule);background:#FBF7EE;color:var(--ink);border-radius:2px}
+select:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+button.act{background:var(--indigo);color:var(--paper);border-color:var(--indigo);font-weight:600;cursor:pointer}
+button.act:hover{background:var(--indigo-2)}
+button.ghost{background:none;border:1px solid var(--rule);color:var(--indigo);font-family:inherit;
+  font-size:13.5px;padding:7px 12px;border-radius:2px;cursor:pointer}
+button.ghost:hover{background:var(--paper-2)}
+
+.brief{background:#FBF7EE;border:1px solid var(--rule);padding:13px 15px;margin-bottom:16px;font-size:14px;line-height:1.6}
+.brief b{font-family:Bitter,serif;font-size:14.5px;color:var(--indigo)}
+.brief ul{margin:7px 0 0;padding-left:19px}
+.brief li{margin-bottom:3px}
+
+.metabar{display:flex;justify-content:space-between;align-items:baseline;font-size:12.5px;color:var(--muted);margin:2px 0 10px;gap:12px}
+.metabar b{font-family:Bitter,serif;color:var(--indigo);font-size:14px}
+.bar{height:3px;background:var(--rule);margin-bottom:20px}
+.bar > i{display:block;height:100%;background:var(--gold);width:0;transition:width .25s ease}
+
+.qhead{display:flex;gap:10px;align-items:baseline;margin-bottom:4px}
+.qnum{font-family:Bitter,serif;font-weight:700;font-size:19px;color:var(--red);min-width:26px}
+.tagline{font-size:11.5px;color:var(--muted);margin:0 0 12px 36px}
+.tagline.flush{margin-left:0}
+.stim{background:#FBF7EE;border:1px solid var(--rule);padding:13px 15px;margin:0 0 14px 36px;font-size:14.5px;line-height:1.6}
+.stim.flush{margin-left:0}
+.stim .src{display:block;margin-top:7px;font-size:12px;color:var(--muted)}
+.qtext{font-size:17px;font-weight:500;margin:0 0 16px;line-height:1.45}
+
+.opts{list-style:none;margin:0 0 4px;padding:0}
+.opts li{margin-bottom:9px}
+.opt{display:flex;gap:11px;width:100%;text-align:left;background:#FBF7EE;border:1px solid var(--rule);
+  font-family:inherit;font-size:15.5px;line-height:1.45;padding:11px 13px;border-radius:2px;cursor:pointer;
+  color:var(--ink);transition:border-color .15s,background .15s}
+.opt:hover:not(:disabled){border-color:var(--indigo)}
+.opt:disabled{cursor:default}
+.opt .ltr{font-family:Bitter,serif;font-weight:600;color:var(--muted);flex:0 0 14px}
+.opt.sel{background:var(--paper-2);border-color:var(--indigo);border-width:1.5px}
+.opt.sel .ltr{color:var(--indigo)}
+.opt.right{background:#E9F1EA;border-color:var(--green);border-width:1.5px}
+.opt.right .ltr{color:var(--green)}
+.opt.wrong{background:#F7E9E9;border-color:var(--red);border-width:1.5px}
+.opt.wrong .ltr{color:var(--red)}
+.opt.dim{opacity:.55}
+
+.verdict{margin-top:16px;padding-left:14px;border-left:3px solid var(--gold);font-size:14.5px}
+.verdict b{font-family:Bitter,serif;font-size:15px}
+.verdict .ok{color:var(--green)}
+.verdict .no{color:var(--red)}
+.nav{display:flex;gap:10px;margin-top:22px}
+.nav button{flex:1}
+
+/* question grid navigator */
+.grid{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin:18px 0 6px}
+@media(min-width:560px){.grid{grid-template-columns:repeat(10,1fr)}}
+.gcell{aspect-ratio:1;background:#FBF7EE;border:1px solid var(--rule);font-family:inherit;font-size:12.5px;
+  color:var(--muted);cursor:pointer;padding:0;border-radius:2px}
+.gcell.ans{background:var(--indigo);color:var(--paper);border-color:var(--indigo)}
+.gcell.now{outline:2px solid var(--gold);outline-offset:-2px}
+
+.score{font-family:Bitter,serif;font-size:56px;font-weight:700;line-height:1;color:var(--indigo);margin:6px 0 0}
+.score small{font-size:20px;color:var(--muted);font-weight:500}
+.grade{font-size:15px;color:var(--red);font-weight:600;margin:6px 0 20px}
+table{width:100%;border-collapse:collapse;font-size:14px;margin-bottom:22px}
+th,td{text-align:left;padding:7px 4px;border-bottom:1px solid var(--rule)}
+th{font-size:11.5px;color:var(--muted);font-weight:500}
+td.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+h2{font-family:Bitter,serif;font-size:17px;margin:26px 0 10px;color:var(--indigo)}
+h3.sec{font-family:Bitter,serif;font-size:15px;margin:30px 0 4px;color:var(--red);
+  border-bottom:1.5px solid var(--red);padding-bottom:4px}
+.secnote{font-size:12.5px;color:var(--muted);margin:5px 0 18px}
+.review{border-top:1px solid var(--rule);padding-top:12px;margin-bottom:14px;font-size:14.5px}
+.review .qq{font-weight:500;margin-bottom:6px}
+.review .ln{margin:3px 0}
+.review .ln span{color:var(--muted);font-size:12.5px}
+
+.scard{border-top:2px solid var(--indigo);padding-top:14px;margin-bottom:34px}
+.scard h4{font-family:Bitter,serif;font-size:16.5px;margin:0 0 3px;color:var(--indigo);font-weight:600}
+.part{margin:0 0 16px}
+.part .pq{display:flex;gap:9px;font-size:15.5px;margin-bottom:7px}
+.part .pl{font-weight:600;flex:0 0 26px}
+.part .mk{color:var(--red);font-size:13px;white-space:nowrap}
+textarea{width:100%;font-family:inherit;font-size:15px;line-height:1.6;border:1px solid var(--rule);
+  background:#FBF7EE;padding:9px 11px;border-radius:2px;resize:vertical;min-height:74px;color:var(--ink)}
+.skema{margin-top:9px;background:#EDF1EC;border:1px solid #C6D4C7;padding:11px 13px;font-size:14.5px}
+.skema ul{margin:6px 0 0;padding-left:20px}
+.skema li{margin-bottom:4px}
+.skema .lab{font-family:Bitter,serif;font-weight:600;font-size:13.5px;color:var(--green)}
+.rangka{margin-top:9px;background:#F2EEE3;border:1px solid var(--rule);border-left:3px solid var(--gold);padding:11px 13px;font-size:14.5px}
+.rangka .lab{font-family:Bitter,serif;font-weight:600;font-size:13.5px;color:var(--gold)}
+.rangka p{margin:6px 0 0}
+.rangka ol{margin:6px 0 0;padding-left:20px}
+.rangka li{margin-bottom:3px}
+.selfmark{display:flex;align-items:center;gap:9px;margin-top:11px;font-size:13.5px;color:var(--muted)}
+.selfmark input.mk{width:70px;text-align:center}
+.hidden{display:none}
+.empty{color:var(--muted);font-size:15px;padding:30px 0}
+
+footer{padding:20px 22px 0;color:#8494AC;font-size:12.5px;line-height:1.6}
+footer b{color:#C3CEDE;font-weight:600}
+@media (min-width:700px){
+  .sheet{padding:26px 34px 34px 52px}
+  .sheet::before{left:38px}
+  .stim,.tagline{margin-left:38px}
+  .stim.flush,.tagline.flush{margin-left:0}
+  h1{font-size:27px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>
+:root{ --indigo:#123328; --indigo-2:#1C4A38; --gold:#A8802A; --red:#9B3B2E; --green:#2F6B4F; }
+.sheet::before{background:rgba(155,59,46,.32)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Biology KSSM Quiz</h1>
+  <p class="sub">Form 4 &amp; 5 — 28 chapters, built to the 4551 assessment format</p>
+  <div class="tabs" role="tablist">
+    <button class="tab on" id="tab-k1" role="tab">Paper 1</button>
+    <button class="tab" id="tab-k2" role="tab">Paper 2</button>
+  </div>
+</header>
+
+<div class="exambar" id="exambar">
+  <div><span class="lbl" id="ex-name">Paper 1</span> <span class="clock" id="ex-clock">1:15:00</span></div>
+  <div id="ex-right"><button id="ex-quit">End paper</button></div>
+</div>
+
+<main class="sheet">
+
+<!-- ================= PAPER 1 ================= -->
+<section id="pane-k1">
+  <div class="modes">
+    <button class="mode on" id="m1-lat">Practice by chapter</button>
+    <button class="mode" id="m1-uji">Full paper · 40 questions · 1 h 15 min</button>
+  </div>
+
+  <div id="k1-lat">
+    <div id="k1-setup">
+      <div class="controls">
+        <div class="field"><label for="o-form">Form</label>
+          <select id="o-form"><option value="0">All</option><option value="4">Form 4</option><option value="5">Form 5</option></select></div>
+        <div class="field"><label for="o-bab">Chapter</label><select id="o-bab"></select></div>
+        <div class="field"><label for="o-len">Number of questions</label>
+          <select id="o-len"><option value="10">10 questions</option><option value="20" selected>20 questions</option><option value="40">40 questions</option><option value="999">All</option></select></div>
+      </div>
+      <div class="controls" style="margin-top:10px">
+        <div class="field"><label for="o-mins">Time limit</label>
+          <select id="o-mins">
+            <option value="0" selected>No time limit</option>
+            <option value="auto">Match SPM pace (1.875 min per question)</option>
+            <option value="10">10 minutes</option>
+            <option value="15">15 minutes</option>
+            <option value="20">20 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60">1 hour</option>
+            <option value="75">1 hour 15 minutes</option>
+            <option value="90">1 hour 30 minutes</option>
+            <option value="105">1 hour 45 minutes</option>
+            <option value="120">2 hours</option>
+            <option value="135">2 hours 15 minutes</option>
+            <option value="150">2 hours 30 minutes</option>
+            <option value="165">2 hours 45 minutes</option>
+            <option value="180">3 hours</option>
+          </select></div>
+      </div>
+      <div class="controls" style="margin-top:12px"><div class="field"><button class="act" id="o-start">Start practice</button></div></div>
+      <p id="o-count" class="tagline flush"></p>
+    </div>
+    <div id="k1-run" class="hidden">
+      <div class="metabar"><span>Question <b id="o-pos">1</b> / <span id="o-total">20</span></span><span>Correct <b id="o-sc">0</b> · <span id="o-time">0:00</span></span></div>
+      <div class="bar"><i id="o-prog"></i></div>
+      <div id="o-body"></div>
+    </div>
+    <div id="k1-done" class="hidden"></div>
+  </div>
+
+  <div id="k1-uji" class="hidden">
+    <div id="k1e-setup">
+      <div class="brief">
+        <b>Paper 1 (4551/1) — Instructions</b>
+        <ul>
+          <li>This paper has 40 objective questions. Answer all questions.</li>
+          <li>Time: 1 hour 15 minutes. The clock starts the moment you press the button below.</li>
+          <li>Each question is followed by four options. Choose one answer only.</li>
+          <li>Questions are drawn from all 28 chapters of Form 4 and Form 5.</li>
+          <li>Answers and explanations stay hidden until the paper is submitted.</li>
+          <li>You cannot leave this paper or open another section while the clock is running.</li>
+        </ul>
+      </div>
+      <p class="tagline flush">Questions are not shown yet. Get paper and a pen ready, then begin.</p>
+      <button class="act" id="k1e-start">Start the clock and show the questions</button>
+    </div>
+    <div id="k1e-run" class="hidden">
+      <div id="k1e-body"></div>
+      <div class="grid" id="k1e-grid"></div>
+      <p class="tagline flush" id="k1e-left"></p>
+      <div class="nav"><button class="ghost" id="k1e-prev" style="flex:1">Previous</button><button class="ghost" id="k1e-next" style="flex:1">Next</button></div>
+      <div class="nav"><button class="act" id="k1e-submit">Submit paper</button></div>
+    </div>
+    <div id="k1e-done" class="hidden"></div>
+  </div>
+</section>
+
+<!-- ================= PAPER 2 ================= -->
+<section id="pane-k2" class="hidden">
+  <div class="modes">
+    <button class="mode on" id="m2-lat">Practice by chapter</button>
+    <button class="mode" id="m2-uji">Full paper · 2 h 30 min</button>
+  </div>
+
+  <div id="k2-lat">
+    <div id="k2l-setup">
+      <div class="controls">
+        <div class="field"><label for="s-form">Form</label>
+          <select id="s-form"><option value="0">All</option><option value="4">Form 4</option><option value="5">Form 5</option></select></div>
+        <div class="field"><label for="s-bab">Chapter</label><select id="s-bab"></select></div>
+        <div class="field"><label for="s-type">Question type</label>
+          <select id="s-type"><option value="all">Structured and essay</option><option value="str">Structured only</option><option value="esei">Essay only</option></select></div>
+      </div>
+      <div class="controls" style="margin-top:10px">
+        <div class="field"><label for="s-mins">Time limit</label>
+          <select id="s-mins">
+            <option value="0" selected>No time limit</option>
+            <option value="auto">Match SPM pace (11 min structured, 30 min essay)</option>
+            <option value="10">10 minutes</option>
+            <option value="15">15 minutes</option>
+            <option value="20">20 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60">1 hour</option>
+            <option value="75">1 hour 15 minutes</option>
+            <option value="90">1 hour 30 minutes</option>
+            <option value="105">1 hour 45 minutes</option>
+            <option value="120">2 hours</option>
+            <option value="135">2 hours 15 minutes</option>
+            <option value="150">2 hours 30 minutes</option>
+            <option value="165">2 hours 45 minutes</option>
+            <option value="180">3 hours</option>
+          </select></div>
+      </div>
+      <div class="controls" style="margin-top:12px"><div class="field"><button class="act" id="s-start">Start practice</button></div></div>
+      <p id="s-count" class="tagline flush"></p>
+    </div>
+    <div id="k2l-run" class="hidden">
+      <p class="tagline flush">Write your own answer first, then compare it against the outline and suggested scheme.</p>
+      <div id="s-body"></div>
+      <div class="nav"><button class="act" id="s-end">End practice and open all schemes</button></div>
+    </div>
+    <div id="k2l-done" class="hidden"></div>
+  </div>
+
+  <div id="k2-uji" class="hidden">
+    <div id="k2e-setup">
+      <div class="brief">
+        <b>Paper 2 (4551/2) — Instructions</b>
+        <ul>
+          <li>Section A: 8 structured questions. Answer all questions. 60 marks.</li>
+          <li>Section B: 2 restricted response questions. Answer one only. 20 marks.</li>
+          <li>Section C: 1 open response question. 20 marks.</li>
+          <li>Total 100 marks. Time: 2 hours 30 minutes, starting the moment you press the button below.</li>
+          <li>Suggested timing: 90 minutes for Section A, 30 minutes each for Sections B and C.</li>
+          <li>Outlines and answer schemes stay hidden until you end the paper.</li>
+          <li>You cannot leave this paper or open another section while the clock is running.</li>
+        </ul>
+      </div>
+      <p class="tagline flush">Questions are not shown yet. Get paper and a pen ready, then begin.</p>
+      <button class="act" id="k2e-start">Start the clock and show the questions</button>
+    </div>
+    <div id="k2e-run" class="hidden">
+      <div id="k2e-body"></div>
+      <div class="nav"><button class="act" id="k2e-submit">End paper and show schemes</button></div>
+    </div>
+    <div id="k2e-done" class="hidden"></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p><b>About these questions.</b> Every question here is an original practice item written to the Biology SPM 4551 assessment format and the KSSM Form 4 and Form 5 syllabus. These are not copies of state trial paper questions, which are copyright material belonging to the respective JPN. Paper 3 (4551/3) is a laboratory practical test and is not covered by this app.</p>
+</footer>
+</div>
+
+<script>
+/* =======================================================================
+   CHAPTERS
+   ======================================================================= */
+const BAB = {
+  4:["Introduction to Biology and Laboratory Rules","Cell Biology and Cell Organisation",
+     "Movement of Substances Across a Plasma Membrane","Chemical Composition in a Cell","Metabolism and Enzymes",
+     "Cell Division","Cellular Respiration","Respiratory System in Humans and Animals",
+     "Nutrition and the Human Digestive System","Transport in Humans and Animals","Immunity in Humans",
+     "Coordination and Response in Humans","Homeostasis and the Human Urinary System",
+     "Support and Movement in Humans and Animals",
+     "Sexual Reproduction, Development and Growth in Humans and Animals"],
+  5:["Organisation of Plant Tissues and Growth","Leaf Structure and Function","Nutrition in Plants",
+     "Transport in Plants","Response in Plants","Sexual Reproduction in Flowering Plants",
+     "Adaptation of Plants to Habitats","Biodiversity","Ecosystem","Environmental Sustainability",
+     "Inheritance","Variation","Genetic Technology"]
+};
+
+/* =======================================================================
+   OBJECTIVE QUESTION BANK   f=form  b=chapter  a=index of answer  e=explanation
+   ======================================================================= */
+const OBJ = [
+/* ---- F4 C1 Introduction to Biology and Laboratory Rules ---- */
+{f:4,b:1,q:"Which field of biology studies the structure and function of cells?",
+ o:["Ecology","Cytology","Genetics","Entomology"],a:1,
+ e:"Cytology is the study of cells. Ecology studies the relationship between organisms and their environment, genetics studies inheritance, and entomology studies insects."},
+{f:4,b:1,s:"A student spills concentrated acid onto the skin of the hand during a practical.",q:"What is the most appropriate first action to take?",
+ o:["Apply cream to the affected area","Wash the affected area with plenty of running water","Apply an alkaline solution to neutralise the acid","Wrap the affected area with a clean cloth"],a:1,
+ e:"The affected area must be washed with plenty of running water to dilute and remove the acid. Applying an alkali can cause an exothermic reaction that worsens the injury."},
+{f:4,b:1,q:"Why is binomial nomenclature used in biology?",
+ o:["To give each species one scientific name accepted worldwide","To classify organisms according to their habitat","To determine the actual size of an organism","To record the number of individuals in a population"],a:0,
+ e:"Binomial nomenclature gives each species a genus and species name in Latin so that one species is referred to by the same name by scientists in any country."},
+
+/* ---- F4 C2 Cell Biology and Cell Organisation ---- */
+{f:4,b:2,q:"Which organelle is responsible for producing most of the ATP in a cell?",
+ o:["Ribosome","Mitochondrion","Lysosome","Golgi apparatus"],a:1,
+ e:"The mitochondrion is the site of aerobic cellular respiration, which produces ATP. Ribosomes synthesise protein, lysosomes digest materials, and the Golgi apparatus modifies and packages proteins."},
+{f:4,b:2,s:"Organelle X is a membrane-bound sac containing hydrolytic enzymes.",q:"What is organelle X?",
+ o:["Lysosome","Chloroplast","Smooth endoplasmic reticulum","Centriole"],a:0,
+ e:"A lysosome contains hydrolytic enzymes that digest damaged organelles, bacteria and foreign material. The enzymes are enclosed in a membrane so they do not digest the cell's own cytoplasm."},
+{f:4,b:2,q:"Which is the correct sequence of levels of organisation in a multicellular organism?",
+ o:["cell, tissue, organ, system, organism","cell, organ, tissue, system, organism","tissue, cell, organ, organism, system","cell, tissue, system, organ, organism"],a:0,
+ e:"Similar cells form a tissue, tissues group into an organ, several organs work together as a system, and systems make up the organism."},
+
+/* ---- F4 C3 Movement of Substances Across a Plasma Membrane ---- */
+{f:4,b:3,q:"What is the movement of water molecules from a region of higher water concentration to a region of lower water concentration through a semi-permeable membrane?",
+ o:["Simple diffusion","Osmosis","Active transport","Pinocytosis"],a:1,
+ e:"Osmosis is the diffusion of water molecules through a semi-permeable membrane down the water concentration gradient. It is a passive process and does not use ATP."},
+{f:4,b:3,s:"A plant cell is placed in a concentrated sucrose solution.",q:"What will happen to the cell?",
+ o:["The cell becomes turgid","The cell undergoes plasmolysis","The cell undergoes haemolysis","The cell swells and bursts"],a:1,
+ e:"In a hypertonic solution, water leaves the cell by osmosis, the cytoplasm shrinks and the plasma membrane pulls away from the cell wall. This process is called plasmolysis."},
+{f:4,b:3,q:"Which feature distinguishes active transport from diffusion?",
+ o:["It occurs across the plasma membrane","It requires energy in the form of ATP","It involves small molecules","It occurs down a concentration gradient"],a:1,
+ e:"Active transport moves substances against the concentration gradient and requires ATP together with carrier proteins. Diffusion is passive and follows the concentration gradient."},
+
+/* ---- F4 C4 Chemical Composition in a Cell ---- */
+{f:4,b:4,q:"What is the basic unit that makes up proteins?",
+ o:["Glucose","Amino acid","Fatty acid","Nucleotide"],a:1,
+ e:"Proteins are built from amino acids joined by peptide bonds. Glucose forms carbohydrates, fatty acids and glycerol form lipids, and nucleotides form nucleic acids."},
+{f:4,b:4,q:"What is the main function of carbohydrates in a cell?",
+ o:["Main energy source","Carrier of genetic information","Catalyst for biochemical reactions","Transport of oxygen in blood"],a:0,
+ e:"Carbohydrates, mainly glucose, are the main energy source for cells through cellular respiration. Nucleic acids carry genetic information and enzymes, which are proteins, act as catalysts."},
+{f:4,b:4,s:"Benedict's test is carried out on solution P and produces a brick red precipitate.",q:"What conclusion can be made about solution P?",
+ o:["It contains reducing sugar","It contains protein","It contains starch","It contains lipid"],a:0,
+ e:"A brick red precipitate in Benedict's test indicates the presence of reducing sugar such as glucose or maltose. Starch is tested with iodine solution and protein with the Biuret test."},
+
+/* ---- F4 C5 Metabolism and Enzymes ---- */
+{f:4,b:5,q:"Which of the following is a characteristic of an enzyme?",
+ o:["An enzyme acts as the substrate in a reaction","An enzyme speeds up a reaction without being permanently changed","An enzyme is destroyed after every reaction","An enzyme is effective at all pH values"],a:1,
+ e:"An enzyme is a biological catalyst that speeds up a reaction by lowering the activation energy, and is not permanently changed, so it can be used repeatedly."},
+{f:4,b:5,s:"The temperature of an enzyme-controlled reaction is raised from 37 °C to 70 °C.",q:"What happens to the rate of reaction?",
+ o:["The rate increases continuously","The rate falls because the enzyme is denatured","The rate remains unchanged","The rate doubles"],a:1,
+ e:"At high temperature the bonds holding the three-dimensional shape of the enzyme break. The active site changes shape, the substrate can no longer bind, and the enzyme is said to be denatured."},
+{f:4,b:5,q:"Anabolism differs from catabolism because anabolism",
+ o:["builds complex molecules from simple ones and absorbs energy","breaks down complex molecules and releases energy","does not require enzymes","occurs only in animal cells"],a:0,
+ e:"Anabolism refers to building reactions such as photosynthesis and protein synthesis, which absorb energy. Catabolism breaks molecules down and releases energy, as in cellular respiration."},
+
+/* ---- F4 C6 Cell Division ---- */
+{f:4,b:6,q:"The end product of one mitotic division of a diploid cell is",
+ o:["two diploid daughter cells identical to the parent cell","four haploid daughter cells","two haploid daughter cells","four diploid daughter cells"],a:0,
+ e:"Mitosis produces two diploid daughter cells identical to the parent cell in chromosome number and content. Meiosis produces four haploid cells instead."},
+{f:4,b:6,q:"What is the importance of meiosis to an organism?",
+ o:["It produces haploid gametes and creates genetic variation","It replaces damaged skin cells","It increases the chromosome number in somatic cells","It repairs injured tissue"],a:0,
+ e:"Meiosis produces haploid gametes so that chromosome number is restored after fertilisation, and crossing over together with random assortment of homologous chromosomes creates genetic variation."},
+{f:4,b:6,s:"Homologous chromosomes pair up and exchange chromatid segments.",q:"This event occurs during",
+ o:["prophase I of meiosis","metaphase of mitosis","anaphase II of meiosis","telophase of mitosis"],a:0,
+ e:"Crossing over occurs in prophase I of meiosis when homologous chromosomes pair to form a bivalent and exchange chromatid segments at the chiasma, producing new gene combinations."},
+
+/* ---- F4 C7 Cellular Respiration ---- */
+{f:4,b:7,q:"Aerobic cellular respiration of one glucose molecule produces the end products",
+ o:["carbon dioxide, water and ATP","lactic acid and ATP","ethanol, carbon dioxide and ATP","glucose and oxygen"],a:0,
+ e:"Aerobic respiration oxidises glucose completely to carbon dioxide and water, releasing energy that is stored as ATP."},
+{f:4,b:7,q:"During very vigorous exercise, human muscle carries out anaerobic respiration and produces",
+ o:["ethanol and carbon dioxide","lactic acid","pyruvic acid and oxygen","glycogen"],a:1,
+ e:"When the oxygen supply is insufficient, muscle cells convert glucose to lactic acid. The accumulation of lactic acid causes muscle fatigue and cramp."},
+{f:4,b:7,q:"Why does aerobic respiration produce more ATP than anaerobic respiration?",
+ o:["Glucose is completely oxidised in aerobic respiration","Aerobic respiration occurs in the cytoplasm","Anaerobic respiration does not use glucose","Aerobic respiration does not require enzymes"],a:0,
+ e:"In aerobic respiration glucose is completely oxidised through the Krebs cycle and the electron transport chain in the mitochondrion, releasing far more energy."},
+
+/* ---- F4 C8 Respiratory System in Humans and Animals ---- */
+{f:4,b:8,q:"Which feature of an alveolus facilitates gaseous exchange?",
+ o:["A wall several cells thick","A moist surface with a dense capillary network","No blood supply","A thick cuticular wall"],a:1,
+ e:"An alveolus has a wall one cell thick, a moist surface, a large total surface area and a dense capillary network, all of which speed up the diffusion of gases."},
+{f:4,b:8,s:"The diaphragm muscle contracts and flattens, and the external intercostal muscles contract.",q:"What happens next?",
+ o:["Air enters the lungs during inhalation","Air leaves the lungs during exhalation","The volume of the thoracic cavity decreases","Air pressure in the lungs increases"],a:0,
+ e:"Contraction of the diaphragm and external intercostal muscles increases the volume of the thoracic cavity, lowering the air pressure in the lungs, so air from outside enters the lungs."},
+{f:4,b:8,q:"The respiratory structure used by fish for gaseous exchange is the",
+ o:["trachea","gill","alveolus","spiracle"],a:1,
+ e:"Fish use gills, whose filaments and lamellae carry a dense capillary network, to absorb dissolved oxygen from water."},
+
+/* ---- F4 C9 Nutrition and the Human Digestive System ---- */
+{f:4,b:9,q:"The enzyme that digests starch to maltose in the mouth is",
+ o:["pepsin","amylase","lipase","trypsin"],a:1,
+ e:"Salivary amylase digests starch to maltose in the mouth at a slightly alkaline pH. Pepsin digests protein in the stomach and lipase digests lipids."},
+{f:4,b:9,q:"What is the function of bile in lipid digestion?",
+ o:["It digests lipids to fatty acids","It emulsifies lipids into small droplets","It neutralises amino acids","It absorbs fatty acids into the blood"],a:1,
+ e:"Bile contains no enzymes. It emulsifies lipids into small droplets so that the total surface area increases and lipase can act more rapidly."},
+{f:4,b:9,s:"This structure has villi, a dense capillary network and lacteals.",q:"What is the main function of this structure?",
+ o:["Absorption of digested products","Absorption of water and mineral salts only","Production of protein-digesting enzymes","Storage of waste material"],a:0,
+ e:"These are features of the ileum. Villi increase the total surface area, capillaries absorb glucose and amino acids, and lacteals absorb the products of lipid digestion."},
+
+/* ---- F4 C10 Transport in Humans and Animals ---- */
+{f:4,b:10,q:"The blood vessel that carries oxygenated blood from the lungs to the heart is the",
+ o:["pulmonary artery","pulmonary vein","aorta","vena cava"],a:1,
+ e:"The pulmonary vein carries oxygenated blood from the lungs to the left atrium. The pulmonary artery carries deoxygenated blood from the right ventricle to the lungs."},
+{f:4,b:10,q:"Why is the wall of the left ventricle thicker than the wall of the right ventricle?",
+ o:["To pump blood to the whole body, which requires higher pressure","To hold a larger volume of blood","To separate oxygenated and deoxygenated blood","To produce red blood cells"],a:0,
+ e:"The left ventricle pumps blood to the whole body through the aorta, so it needs thicker muscle to generate higher pressure. The right ventricle only pumps to the lungs."},
+{f:4,b:10,q:"Which of the following is a function of the lymphatic system?",
+ o:["Transporting oxygen to cells","Draining excess tissue fluid back into the blood system","Producing the hormone insulin","Filtering blood to form urine"],a:1,
+ e:"The lymphatic system drains excess tissue fluid back into the bloodstream, transports the products of lipid digestion through lacteals, and plays a role in body defence."},
+
+/* ---- F4 C11 Immunity in Humans ---- */
+{f:4,b:11,q:"The white blood cell that destroys pathogens by phagocytosis is the",
+ o:["lymphocyte","phagocyte","platelet","erythrocyte"],a:1,
+ e:"Phagocytes such as neutrophils and macrophages engulf and digest pathogens by phagocytosis. Lymphocytes produce antibodies and act in specific immunity."},
+{f:4,b:11,q:"The immunity gained after a person receives a vaccine is",
+ o:["artificial active immunity","natural passive immunity","natural active immunity","artificial passive immunity"],a:0,
+ e:"A vaccine contains weakened antigens that stimulate the body to produce its own antibodies and memory cells, so it is classified as artificial active immunity."},
+{f:4,b:11,q:"What is the main function of an antibody?",
+ o:["To bind a specific antigen and neutralise its effect","To transport oxygen to tissues","To clot blood at a wound","To produce digestive enzymes"],a:0,
+ e:"An antibody is a protein produced by B lymphocytes that binds specifically to a particular antigen to neutralise it, agglutinate it, or make destruction of the pathogen easier."},
+
+/* ---- F4 C12 Coordination and Response in Humans ---- */
+{f:4,b:12,q:"The part of the brain that controls balance and coordination of muscle movement is the",
+ o:["cerebrum","cerebellum","medulla oblongata","hypothalamus"],a:1,
+ e:"The cerebellum controls body balance and the coordination of muscle movement. The cerebrum controls thought and memory, while the medulla oblongata controls heartbeat and breathing."},
+{f:4,b:12,s:"A hand is withdrawn rapidly on touching a hot object.",q:"This action is an example of",
+ o:["a conditioned response","a reflex action","a hormonal response","a voluntary movement"],a:1,
+ e:"A reflex action is a rapid, automatic response that does not involve conscious thought. The impulse travels through a reflex arc in the spinal cord before reaching the brain."},
+{f:4,b:12,q:"The main difference between nervous coordination and hormonal coordination is that nervous coordination is",
+ o:["faster and its effect is short-lived","slower and its effect lasts longer","transported in the bloodstream","not involving a receptor organ"],a:0,
+ e:"Nerve impulses travel rapidly along neurones and their effects are short-lived and localised. Hormones are transported in the blood, act more slowly, and their effects last longer."},
+
+/* ---- F4 C13 Homeostasis and the Human Urinary System ---- */
+{f:4,b:13,q:"The basic functional unit of the kidney is the",
+ o:["nephron","alveolus","neurone","villus"],a:0,
+ e:"The nephron is the functional unit of the kidney, carrying out ultrafiltration at the glomerulus and selective reabsorption along the tubules to produce urine."},
+{f:4,b:13,q:"What is the effect of increased ADH on the kidney?",
+ o:["Water reabsorption increases and urine volume decreases","Water reabsorption decreases and urine becomes dilute","Filtration of glucose stops","Salt concentration in the blood decreases"],a:0,
+ e:"ADH increases the permeability of the collecting duct to water, so more water is reabsorbed into the blood and the urine volume decreases while becoming more concentrated."},
+{f:4,b:13,q:"Why is homeostasis important to the human body?",
+ o:["It maintains an optimum internal environment for enzyme action","It increases the rate of cell division","It stops hormone production","It reduces the need for oxygen"],a:0,
+ e:"Homeostasis keeps temperature, pH, glucose concentration and water content at optimum levels so that enzymes and cells can function efficiently."},
+
+/* ---- F4 C14 Support and Movement ---- */
+{f:4,b:14,q:"The muscles that work antagonistically at the elbow joint are the",
+ o:["biceps and triceps","diaphragm and intercostals","cardiac muscle and smooth muscle","flexor and sphincter"],a:0,
+ e:"The biceps and triceps work antagonistically. When the biceps contracts and the triceps relaxes the forearm bends, and the reverse happens when the arm is straightened."},
+{f:4,b:14,q:"What is the function of a tendon in the human support system?",
+ o:["It connects muscle to bone","It connects bone to bone","It lubricates the joint surface","It absorbs shock at a joint"],a:0,
+ e:"A tendon connects muscle to bone and transmits the force of muscle contraction to the bone. A ligament connects bone to bone."},
+{f:4,b:14,q:"Support in aquatic plants such as Hydrilla depends mainly on",
+ o:["lignified sclerenchyma tissue","the buoyancy of water and air-filled parenchyma tissue","a thick cuticular cell wall","large buttress roots"],a:1,
+ e:"Aquatic plants are supported by the buoyancy of water and have air-filled parenchyma tissue that increases buoyancy, so thick lignified tissue is not needed."},
+
+/* ---- F4 C15 Sexual Reproduction, Development and Growth ---- */
+{f:4,b:15,q:"The production of male gametes in the testis is known as",
+ o:["oogenesis","spermatogenesis","ovulation","fertilisation"],a:1,
+ e:"Spermatogenesis is the formation of sperm in the seminiferous tubules of the testis through mitosis and meiosis. Oogenesis is the formation of ova in the ovary."},
+{f:4,b:15,q:"The hormone that stimulates the maturation of a follicle in the ovary is",
+ o:["FSH","progesterone","testosterone","ADH"],a:0,
+ e:"FSH from the pituitary gland stimulates the growth and maturation of ovarian follicles and stimulates oestrogen production. LH triggers ovulation."},
+{f:4,b:15,s:"This structure allows the exchange of nutrients and gases between mother and fetus without the two bloodstreams mixing.",q:"What is this structure?",
+ o:["Placenta","Amnion","Chorion","Yolk sac"],a:0,
+ e:"The placenta has villi that increase the surface area for diffusion, allowing exchange of oxygen, nutrients and waste between maternal and fetal blood without the two mixing."},
+
+/* ---- F5 C1 Organisation of Plant Tissues and Growth ---- */
+{f:5,b:1,q:"The plant tissue that actively divides by mitosis is",
+ o:["meristematic tissue","parenchyma tissue","sclerenchyma tissue","epidermal tissue"],a:0,
+ e:"Meristematic tissue consists of cells that actively divide by mitosis, producing new cells for plant growth."},
+{f:5,b:1,q:"The permanent tissue that provides mechanical support through lignified cell walls is",
+ o:["parenchyma","collenchyma","sclerenchyma","phloem"],a:2,
+ e:"Sclerenchyma has thick lignified cell walls and its cells are dead when mature, so it provides strong mechanical support to the plant."},
+{f:5,b:1,q:"A sigmoid growth curve for an organism shows",
+ o:["a lag phase, exponential phase, deceleration phase and stationary phase","continuous unlimited growth","declining growth from the start","repeated intermittent growth"],a:0,
+ e:"A sigmoid curve shows four phases: a slow lag phase, a rapid exponential phase, a deceleration phase as growth slows, and a stationary phase when growth stops."},
+
+/* ---- F5 C2 Leaf Structure and Function ---- */
+{f:5,b:2,q:"The leaf tissue containing the most chloroplasts is the",
+ o:["palisade mesophyll","spongy mesophyll","upper epidermis","cuticle"],a:0,
+ e:"The palisade mesophyll lies near the upper surface of the leaf and contains the most chloroplasts so that light absorption for photosynthesis is maximised."},
+{f:5,b:2,q:"What is the function of stomata on a leaf?",
+ o:["To allow gaseous exchange and transpiration","To absorb water from the soil","To transport sucrose to the roots","To produce new chloroplasts"],a:0,
+ e:"Stomata are pores in the epidermis controlled by guard cells. They allow carbon dioxide to enter, oxygen to leave, and water vapour to be lost by transpiration."},
+{f:5,b:2,q:"The compensation point of a plant is the condition in which",
+ o:["the rate of photosynthesis equals the rate of respiration","the rate of photosynthesis is at a maximum","the plant stops respiring","the stomata are completely closed"],a:0,
+ e:"At the compensation point the rate of photosynthesis equals the rate of respiration, so there is no net gaseous exchange between the plant and its surroundings."},
+
+/* ---- F5 C3 Nutrition in Plants ---- */
+{f:5,b:3,q:"The inorganic nutrient required for the formation of chlorophyll is",
+ o:["magnesium","calcium","phosphorus","sodium"],a:0,
+ e:"Magnesium is an essential component of the chlorophyll molecule. Magnesium deficiency causes chlorosis, in which leaves turn yellow, especially older leaves."},
+{f:5,b:3,q:"The root structure that increases the surface area for water absorption is the",
+ o:["root hair","root cap","cambium","cuticle"],a:0,
+ e:"Root hairs are extensions of root epidermal cells that are very numerous and fine. They maximise the total surface area for the absorption of water and mineral salts."},
+{f:5,b:3,q:"Plants such as the pitcher plant obtain additional nitrogen by",
+ o:["trapping and digesting insects","parasitising other plants","forming a symbiosis with mycorrhizal fungi","absorbing nitrogen directly from the air"],a:0,
+ e:"The pitcher plant is a carnivorous plant growing in nitrogen-poor soil. It traps insects in its pitcher and digests them with enzymes to obtain nitrogen."},
+
+/* ---- F5 C4 Transport in Plants ---- */
+{f:5,b:4,q:"The tissue that transports water and mineral salts from the roots to the leaves is the",
+ o:["xylem","phloem","cambium","parenchyma"],a:0,
+ e:"The xylem transports water and mineral salts in one direction from roots to leaves. The phloem transports the products of photosynthesis such as sucrose in two directions."},
+{f:5,b:4,q:"What is the movement of the products of photosynthesis from the leaves to other parts of the plant?",
+ o:["Transpiration","Translocation","Capillary action","Root secretion"],a:1,
+ e:"Translocation is the transport of organic substances, mainly sucrose, from the leaves as the source to other parts as the sink, through the sieve tubes of the phloem."},
+{f:5,b:4,q:"Phytoremediation is the use of plants to",
+ o:["remove pollutants from soil and water","accelerate crop growth","produce plant hormones","increase the rate of transpiration"],a:0,
+ e:"Phytoremediation uses selected plants to absorb, accumulate or break down pollutants such as heavy metals from contaminated soil and water."},
+
+/* ---- F5 C5 Response in Plants ---- */
+{f:5,b:5,q:"The growth of a plant shoot towards light is known as",
+ o:["positive phototropism","positive geotropism","negative hydrotropism","thigmotropism"],a:0,
+ e:"Positive phototropism is the growth of a shoot towards a light stimulus. Auxin accumulates on the darker side and causes faster cell elongation there."},
+{f:5,b:5,q:"The phytohormone that accelerates fruit ripening is",
+ o:["auxin","ethylene","gibberellin","cytokinin"],a:1,
+ e:"Ethylene is a gaseous phytohormone that accelerates fruit ripening. It is used commercially to ripen fruit such as bananas after transport."},
+{f:5,b:5,q:"One application of auxin in agriculture is to",
+ o:["stimulate root growth on stem cuttings","completely prevent seed germination","reduce fruit size","stop photosynthesis"],a:0,
+ e:"Synthetic auxin is applied to stem cuttings to stimulate root formation in vegetative propagation, and at high concentration it is also used as a selective weedkiller."},
+
+/* ---- F5 C6 Sexual Reproduction in Flowering Plants ---- */
+{f:5,b:6,q:"The part of a flower that produces pollen grains is the",
+ o:["anther","stigma","ovule","sepal"],a:0,
+ e:"The anther on the stamen produces pollen grains containing the male gametes. The stigma receives pollen during pollination."},
+{f:5,b:6,q:"A feature of a wind-pollinated flower is",
+ o:["a feathery stigma and light, abundant pollen","large, brightly coloured petals","the production of abundant nectar","sticky, heavy pollen"],a:0,
+ e:"Wind-pollinated flowers have a large feathery stigma to trap pollen, and their pollen is light, small and produced in large amounts so it is easily carried by wind."},
+{f:5,b:6,q:"After fertilisation occurs in a flowering plant, the ovule develops into the",
+ o:["seed","fruit","stem","root"],a:0,
+ e:"The ovule develops into the seed while the ovary develops into the fruit, which protects the seed and aids its dispersal."},
+
+/* ---- F5 C7 Adaptation of Plants to Habitats ---- */
+{f:5,b:7,q:"The main adaptation of a xerophyte to reduce water loss is",
+ o:["a thick cuticle and few stomata","broad, thin leaves","stomata on the upper leaf surface","the absence of long roots"],a:0,
+ e:"Xerophytes live in dry habitats, so they have a thick cuticle, few sunken stomata, and small or spine-shaped leaves to reduce transpiration."},
+{f:5,b:7,q:"In a hydrophyte such as the water lily, the stomata are located",
+ o:["on the upper leaf surface","on the lower leaf surface only","inside the root","on the submerged stem"],a:0,
+ e:"Water lily leaves float on the water surface, so their stomata are on the upper surface, allowing gaseous exchange with the air."},
+{f:5,b:7,q:"Buttress roots and stilt roots in mangrove plants function to",
+ o:["provide support in soft, muddy soil","absorb sunlight","produce seeds","reduce the rate of photosynthesis"],a:0,
+ e:"Mangrove swamp soil is soft, muddy and unstable. Buttress and stilt roots provide extra support so the plant does not topple over easily."},
+
+/* ---- F5 C8 Biodiversity ---- */
+{f:5,b:8,q:"Biodiversity refers to",
+ o:["the variety of life, including species, genetic and ecosystem diversity","the number of individuals in one population only","the total number of plants in a forest area","the growth rate of one species"],a:0,
+ e:"Biodiversity covers genetic diversity within a species, species diversity within a habitat, and ecosystem diversity across an area."},
+{f:5,b:8,q:"Which of the following is a biodiversity conservation measure?",
+ o:["Gazetting national parks and wildlife protection areas","Opening forests for uncontrolled logging","Introducing foreign species widely","Using pesticides excessively"],a:0,
+ e:"Conservation involves controlled use of resources and habitat protection, including gazetting national parks, wildlife reserves and gene banks."},
+{f:5,b:8,q:"Why is genetic diversity important to the survival of a species?",
+ o:["It increases the chance that some individuals survive when the environment changes","It reduces the number of individuals in a population","It stops the process of natural selection","It ensures all individuals have identical traits"],a:0,
+ e:"Genetic diversity means there is variation of traits in a population. When the environment changes or disease strikes, at least some individuals have a chance to survive and reproduce."},
+
+/* ---- F5 C9 Ecosystem ---- */
+{f:5,b:9,q:"In a food chain, green plants act as the",
+ o:["producer","primary consumer","secondary consumer","decomposer"],a:0,
+ e:"Green plants are producers because they photosynthesise to make their own food, becoming the energy source for the next trophic level."},
+{f:5,b:9,q:"The relationship between a pea plant and Rhizobium bacteria in its root nodules is an example of",
+ o:["symbiotic mutualism","parasitism","competition","predation"],a:0,
+ e:"Rhizobium fixes atmospheric nitrogen for the plant, while the plant provides carbohydrates and shelter. Both benefit, so the relationship is mutualism."},
+{f:5,b:9,q:"Why does energy decrease when passing from one trophic level to the next?",
+ o:["Some energy is lost through respiration, excretion and heat","Energy is reabsorbed by the producers","Energy is entirely converted into mass","Decomposers absorb all the energy"],a:0,
+ e:"Only a small proportion of energy is stored as biomass. The rest is lost as heat through respiration, in waste products, and in parts that are not eaten."},
+
+/* ---- F5 C10 Environmental Sustainability ---- */
+{f:5,b:10,q:"An increase in the concentration of carbon dioxide in the atmosphere contributes mainly to",
+ o:["the greenhouse effect and global warming","depletion of the ozone layer","acid rain","eutrophication"],a:0,
+ e:"Carbon dioxide traps infrared radiation in the atmosphere and raises the Earth's temperature. Ozone depletion is caused by CFCs, while acid rain is caused by sulphur and nitrogen oxides."},
+{f:5,b:10,q:"Eutrophication in a river occurs when",
+ o:["excess fertiliser runs in and stimulates excessive algal growth","water temperature falls suddenly","the concentration of dissolved oxygen increases","aquatic plants are completely removed"],a:0,
+ e:"Fertiliser run-off supplies excess nitrates and phosphates, algae multiply rapidly, then die and are decomposed. This decomposition uses up dissolved oxygen until fish die."},
+{f:5,b:10,q:"Which of the following is a sustainable development practice?",
+ o:["Using renewable energy and practising recycling","Logging without control for economic growth","Discharging industrial waste into rivers","Using fossil fuels to the maximum"],a:0,
+ e:"Sustainable development meets present needs without compromising those of future generations, through renewable energy, recycling and controlled resource management."},
+
+/* ---- F5 C11 Inheritance ---- */
+{f:5,b:11,q:"In a monohybrid cross between two heterozygous individuals Tt, the expected phenotypic ratio of the offspring is",
+ o:["3 : 1","1 : 1","9 : 3 : 3 : 1","1 : 2 : 1"],a:0,
+ e:"A cross of Tt with Tt gives genotypes 1 TT, 2 Tt and 1 tt. Since T is dominant, the phenotypic ratio is 3 dominant to 1 recessive."},
+{f:5,b:11,q:"Mendel's law stating that a pair of alleles separates during gamete formation is the",
+ o:["Law of Segregation","Law of Natural Selection","Law of Complete Dominance","Law of Gene Linkage"],a:0,
+ e:"The Law of Segregation states that a pair of alleles for a trait separates during meiosis, so each gamete receives only one allele from that pair."},
+{f:5,b:11,q:"A man with blood group AB marries a woman with blood group O. The possible blood groups of their children are",
+ o:["A and B only","A, B, AB and O","AB and O only","O only"],a:0,
+ e:"The man's genotype is I^A I^B and the woman's is I^O I^O. Every child receives one I^O from the mother, so genotypes are I^A I^O or I^B I^O, giving blood group A or B only."},
+
+/* ---- F5 C12 Variation ---- */
+{f:5,b:12,q:"Which of the following is an example of continuous variation in humans?",
+ o:["Body height","ABO blood group","Ability to roll the tongue","Ability to taste PTC"],a:0,
+ e:"Continuous variation such as height and body mass shows a continuous range of values and is influenced by many genes as well as environmental factors. Blood group is discontinuous variation."},
+{f:5,b:12,q:"The main sources of genetic variation in a population are",
+ o:["mutation, crossing over and random assortment of chromosomes","growth and mitotic division","diet and exercise","changes in environmental temperature"],a:0,
+ e:"Genetic variation arises from mutation, crossing over during prophase I of meiosis, random assortment of homologous chromosomes, and the random fusion of gametes at fertilisation."},
+{f:5,b:12,q:"Why is variation important in natural selection?",
+ o:["Individuals with suitable traits are more likely to survive and pass on their genes","Variation ensures all individuals survive","Variation stops change within a population","Variation removes competition entirely"],a:0,
+ e:"In a varied population, individuals whose traits best suit the environment are more likely to survive, reproduce and pass those genes to the next generation."},
+
+/* ---- F5 C13 Genetic Technology ---- */
+{f:5,b:13,q:"The enzyme used to cut DNA at a specific sequence in genetic engineering is",
+ o:["restriction enzyme","DNA ligase","amylase","protease"],a:0,
+ e:"A restriction enzyme cuts DNA at a specific nucleotide sequence to remove the desired gene. DNA ligase then joins that gene to a vector."},
+{f:5,b:13,q:"Human insulin is produced commercially by genetic engineering by inserting the insulin gene into",
+ o:["a bacterial plasmid","human red blood cells","a plant chloroplast","a disease-causing virus"],a:0,
+ e:"The human insulin gene is inserted into a bacterial plasmid such as that of E. coli. The bacteria are then cultured in a fermenter and produce human insulin in large quantities."},
+{f:5,b:13,q:"Which of the following is an ethical issue related to genetic technology?",
+ o:["The long-term effects of genetically modified organisms on health and the environment are still uncertain","The falling cost of producing insulin","Increased yields of disease-resistant crops","Easier diagnosis of genetic disease"],a:0,
+ e:"Major ethical issues include uncertainty over the long-term effects of GMOs on human health and ecosystem balance, alongside concerns about genetic privacy and human cloning."}
+];
+/* =======================================================================
+   STRUCTURED QUESTION BANK — Section A
+   Questions are either 7 or 8 marks.
+   A full paper picks 4 seven-mark + 4 eight-mark questions = 60 marks
+   ======================================================================= */
+const STR = [
+/* ================= FORM 4 ================= */
+{f:4,b:1,t:"Laboratory rules and fields of biology",
+ s:"A student carries out a practical to test for the presence of starch in a food sample using iodine solution and a Bunsen burner.",
+ parts:[
+  {q:"State two safety rules that must be followed during this practical.",m:2,ans:["Wear safety goggles and a lab coat","Do not touch or taste any chemical","Tie back long hair when using a Bunsen burner","Do not eat or drink in the laboratory","Turn off the Bunsen burner after use"]},
+  {q:"State the observation that indicates the presence of starch.",m:1,ans:["The iodine solution changes from yellowish brown to blue-black"]},
+  {q:"Explain why safety precautions are important in biology practical work.",m:4,ans:["They prevent injury to students such as burns or inhalation of toxic fumes","They prevent contamination of samples, which would give false results","They protect laboratory apparatus from damage","They build responsible and disciplined scientific habits","They ensure the results of the experiment are reliable and repeatable"]}
+ ]},
+{f:4,b:2,t:"Cell structure and organelles",
+ s:"A diagram shows an animal cell viewed under an electron microscope. Organelle P is oval with internal folds, while organelle Q is a stack of membrane-bound sacs.",
+ parts:[
+  {q:"Name organelle P and organelle Q.",m:2,ans:["P: mitochondrion","Q: Golgi apparatus"]},
+  {q:"State the function of organelle P.",m:2,ans:["Site of aerobic cellular respiration","Produces ATP as the energy source of the cell"]},
+  {q:"Explain why muscle cells contain large numbers of organelle P.",m:2,ans:["Muscle cells require a lot of energy for contraction","A large number of mitochondria produce more ATP to meet that demand"]},
+  {q:"State two differences between a plant cell and an animal cell.",m:2,ans:["A plant cell has a cell wall while an animal cell does not","A plant cell has chloroplasts while an animal cell does not","A plant cell has a large central vacuole while an animal cell vacuole is small","An animal cell has centrioles while most plant cells do not"]}
+ ]},
+{f:4,b:3,t:"Osmosis in plant and animal cells",
+ s:"Three potato tissue strips of equal mass are immersed in sucrose solutions of 0.0 M, 0.3 M and 0.6 M for one hour. The mass of each strip is measured before and after immersion.",
+ parts:[
+  {q:"State the manipulated variable and the responding variable in this experiment.",m:2,ans:["Manipulated variable: concentration of the sucrose solution","Responding variable: change in mass of the potato tissue"]},
+  {q:"State and explain the expected change in mass of the strip in the 0.0 M solution.",m:3,ans:["The mass increases","The 0.0 M solution is hypotonic to the cell cytoplasm","Water enters the cells by osmosis through the semi-permeable membrane until the cells become turgid"]},
+  {q:"Explain what happens to the cells in the 0.6 M solution.",m:3,ans:["The solution is hypertonic to the cell cytoplasm","Water leaves the cells by osmosis","The cytoplasm shrinks and the plasma membrane pulls away from the cell wall, which is plasmolysis"]}
+ ]},
+{f:4,b:4,t:"Chemical composition and food tests",
+ s:"A student tests one food sample X and obtains the following results: Benedict's test gives a brick red precipitate, the Biuret test gives a purple colour, and the translucent paper test leaves a translucent spot.",
+ parts:[
+  {q:"State the three classes of food present in sample X.",m:3,ans:["Reducing sugar, that is carbohydrate","Protein","Lipid"]},
+  {q:"State the basic unit of protein and of lipid.",m:2,ans:["Protein: amino acid","Lipid: fatty acid and glycerol"]},
+  {q:"Explain why protein is needed by the human body.",m:3,ans:["For growth and repair of body tissue","For the production of enzymes and hormones","For the production of antibodies for body defence","As a reserve energy source when carbohydrate and lipid are insufficient"]}
+ ]},
+{f:4,b:5,t:"Factors affecting enzyme action",
+ s:"The rate of action of the enzyme amylase is tested at pH 3, pH 7 and pH 10 at 37 °C. The highest rate is recorded at pH 7.",
+ parts:[
+  {q:"State the optimum pH of amylase in this experiment.",m:1,ans:["pH 7"]},
+  {q:"Explain why the rate of enzyme action is low at pH 3.",m:3,ans:["A very low pH alters the charges and bonds within the enzyme structure","The active site of the enzyme changes shape and the enzyme is denatured","The substrate can no longer bind to the active site, so the rate of reaction falls"]},
+  {q:"State two other factors that affect the rate of enzyme action.",m:2,ans:["Temperature","Enzyme concentration","Substrate concentration","Presence of an enzyme inhibitor or activator"]},
+  {q:"Explain the meaning of enzyme specificity.",m:2,ans:["Each enzyme acts on one particular substrate only","The shape of the enzyme's active site is specifically complementary to the shape of that substrate molecule"]}
+ ]},
+{f:4,b:6,t:"Mitosis and meiosis",
+ s:"A diagram shows two types of cell division. Division R produces two daughter cells identical to the parent cell, while division S produces four daughter cells with half the chromosome number.",
+ parts:[
+  {q:"Name division R and division S.",m:2,ans:["R: mitosis","S: meiosis"]},
+  {q:"State two importances of division R to an organism.",m:2,ans:["Growth of the organism through an increase in cell number","Repair and replacement of damaged tissue","Asexual reproduction in certain organisms","Maintaining the diploid chromosome number in somatic cells"]},
+  {q:"Explain how division S creates genetic variation.",m:3,ans:["Crossing over occurs in prophase I when homologous chromosomes exchange chromatid segments","Random assortment of homologous chromosomes at metaphase I produces different chromosome combinations","Together these processes produce gametes with different gene combinations"]}
+ ]},
+{f:4,b:7,t:"Aerobic and anaerobic cellular respiration",
+ s:"An athlete runs a 100 m sprint. After the race the leg muscles ache and the breathing rate stays high for several minutes.",
+ parts:[
+  {q:"State the type of cellular respiration dominant in the athlete's muscles during the sprint.",m:1,ans:["Anaerobic cellular respiration"]},
+  {q:"Write the word equation for this respiration in human muscle cells.",m:2,ans:["Glucose produces lactic acid and energy"]},
+  {q:"Explain why the athlete's muscles ache after the race.",m:2,ans:["Lactic acid accumulates in the muscle cells because the oxygen supply is insufficient","The accumulation of lactic acid causes muscle fatigue and pain"]},
+  {q:"Explain why the athlete's breathing rate stays high after stopping.",m:3,ans:["The body must repay the oxygen debt built up during the sprint","Extra oxygen is needed to oxidise lactic acid to carbon dioxide and water","Some lactic acid is converted back to glucose in the liver"]}
+ ]},
+{f:4,b:8,t:"Breathing mechanism and gaseous exchange",
+ s:"A diagram shows an alveolus surrounded by blood capillaries. Inhaled air contains about 21% oxygen while exhaled air contains about 16% oxygen.",
+ parts:[
+  {q:"State three features of an alveolus that facilitate gaseous exchange.",m:3,ans:["A wall one cell thick so the diffusion distance is short","A large total surface area","A moist surface so gases can dissolve","A dense network of blood capillaries to maintain the concentration gradient"]},
+  {q:"Explain how oxygen moves from the alveolus into the blood.",m:2,ans:["The oxygen concentration in the alveolus is higher than in the capillary blood","Oxygen diffuses down the concentration gradient across the alveolar and capillary walls into the blood"]},
+  {q:"Explain the changes in the thoracic cavity during inhalation.",m:3,ans:["The external intercostal muscles contract and raise the ribs upwards and outwards","The diaphragm muscle contracts and flattens","The volume of the thoracic cavity increases, air pressure in the lungs falls, so outside air enters the lungs"]}
+ ]},
+{f:4,b:9,t:"Digestion and absorption of nutrients",
+ s:"A diagram shows the human digestive system. Organ M secretes bile, while region N has a folded wall bearing many villi.",
+ parts:[
+  {q:"Name organ M and region N.",m:2,ans:["M: liver","N: ileum"]},
+  {q:"State the function of bile in digestion.",m:2,ans:["It emulsifies lipids into small droplets to increase the total surface area","It neutralises acid from the stomach and provides an alkaline pH for intestinal enzymes"]},
+  {q:"Explain three features of region N that facilitate the absorption of digested products.",m:3,ans:["A folded wall bearing many villi, which increases the total surface area","A villus wall one cell thick so the diffusion distance is short","A dense capillary network to transport glucose and amino acids","The presence of lacteals to absorb the products of lipid digestion","Its length gives sufficient time for absorption to be completed"]}
+ ]},
+{f:4,b:10,t:"The human circulatory system",
+ s:"A diagram shows the structure of the human heart. Vessel T carries blood from the heart to the lungs while vessel U carries blood from the heart to the rest of the body.",
+ parts:[
+  {q:"Name vessel T and vessel U.",m:2,ans:["T: pulmonary artery","U: aorta"]},
+  {q:"State one structural difference between an artery and a vein.",m:2,ans:["An artery has a thicker, muscular and elastic wall while a vein has a thinner wall","A vein has valves to prevent backflow of blood while an artery does not, except at the base of the aorta and pulmonary artery","An artery has a narrower lumen while a vein has a wider lumen"]},
+  {q:"Explain why human blood circulation is described as a double circulation.",m:2,ans:["Blood passes through the heart twice in one complete circuit","The pulmonary circulation carries blood between the heart and lungs, while the systemic circulation carries blood between the heart and the rest of the body"]},
+  {q:"State two importances of double circulation.",m:2,ans:["Oxygenated and deoxygenated blood do not mix, so tissue oxygenation is more efficient","High blood pressure can be maintained to deliver blood rapidly to the whole body","The rate of delivery of oxygen and nutrients to cells increases"]}
+ ]},
+{f:4,b:11,t:"Body defence and immunity",
+ s:"A child is given a measles vaccine at nine months old and a second dose at 12 months. The antibody level in the blood rises higher and faster after the second dose.",
+ parts:[
+  {q:"State the type of immunity gained through vaccination.",m:1,ans:["Artificial active immunity"]},
+  {q:"Explain why the antibody level rises faster after the second dose.",m:3,ans:["The first dose stimulated the production of antibodies and memory cells","Memory cells recognise the same antigen rapidly when the second dose is given","Lymphocytes multiply and produce antibodies in larger amounts in a shorter time"]},
+  {q:"State three non-specific body defence mechanisms.",m:3,ans:["The skin acts as a physical barrier against pathogens","Hydrochloric acid in the stomach destroys bacteria in food","Mucus and cilia in the airways trap and remove pathogens","Phagocytosis by phagocytes such as neutrophils and macrophages","Lysozyme in tears destroys bacteria","Blood clotting seals a wound"]}
+ ]},
+{f:4,b:12,t:"The nervous system and reflex action",
+ s:"A student accidentally touches a hot beaker and withdraws the hand immediately, before becoming aware of the heat.",
+ parts:[
+  {q:"State the type of action that occurs.",m:1,ans:["Reflex action"]},
+  {q:"Arrange the pathway of the impulse in the reflex arc for this action.",m:3,ans:["A receptor in the skin detects the stimulus","The afferent or sensory neurone carries the impulse to the spinal cord","An interneurone in the spinal cord relays the impulse","The efferent or motor neurone carries the impulse to the arm muscle as the effector"]},
+  {q:"Explain why reflex action is important to humans.",m:3,ans:["The response is very rapid because the impulse does not need to pass through the brain first","It protects the body from more serious injury","It occurs automatically without requiring conscious thought"]}
+ ]},
+{f:4,b:13,t:"Homeostasis and the regulation of water",
+ s:"A farm worker works under the sun for several hours without drinking water. The urine produced is small in volume and dark in colour.",
+ parts:[
+  {q:"State the hormone whose secretion increases in this situation.",m:1,ans:["Antidiuretic hormone (ADH)"]},
+  {q:"Explain how this hormone causes the urine to become concentrated.",m:3,ans:["The hypothalamus detects the rise in blood osmotic pressure and the pituitary secretes more ADH","ADH increases the permeability of the collecting duct and distal convoluted tubule to water","More water is reabsorbed into the blood, so urine volume falls and the urine becomes more concentrated"]},
+  {q:"State two main processes that occur in a nephron to produce urine.",m:2,ans:["Ultrafiltration at the glomerulus and Bowman's capsule","Selective reabsorption at the proximal convoluted tubule, loop of Henle and collecting duct","Secretion of certain substances into the tubule"]},
+  {q:"Explain why homeostasis is important to the body.",m:2,ans:["It maintains an optimum internal environment so that enzymes can function efficiently","It ensures body cells are not damaged by extreme changes in osmotic pressure, temperature or pH"]}
+ ]},
+{f:4,b:14,t:"Support and movement in humans",
+ s:"A diagram shows the human elbow joint. Muscle V lies at the front of the upper arm while muscle W lies at the back of the upper arm.",
+ parts:[
+  {q:"Name muscle V and muscle W.",m:2,ans:["V: biceps","W: triceps"]},
+  {q:"Explain how muscles V and W act to bend the forearm.",m:3,ans:["Muscle V, the biceps, contracts","Muscle W, the triceps, relaxes","The tendon pulls the radius upwards, so the forearm bends at the elbow joint"]},
+  {q:"State the meaning of antagonistic muscles.",m:2,ans:["A pair of muscles that act in opposite directions at the same joint","When one muscle contracts, the other relaxes"]}
+ ]},
+{f:4,b:15,t:"Reproduction and the menstrual cycle",
+ s:"A woman's menstrual cycle lasts 28 days. Ovulation occurs at about day 14 of the cycle.",
+ parts:[
+  {q:"Name two hormones secreted by the pituitary gland to control the menstrual cycle.",m:2,ans:["Follicle stimulating hormone (FSH)","Luteinising hormone (LH)"]},
+  {q:"State the function of FSH and LH in the menstrual cycle.",m:2,ans:["FSH stimulates the growth and maturation of ovarian follicles and the secretion of oestrogen","LH triggers ovulation and the formation of the corpus luteum"]},
+  {q:"Explain the role of progesterone after ovulation.",m:2,ans:["Progesterone is secreted by the corpus luteum","It maintains and thickens the endometrium so it is ready to receive an embryo if fertilisation occurs"]},
+  {q:"Explain what happens to the endometrium if fertilisation does not occur.",m:2,ans:["The corpus luteum degenerates and progesterone and oestrogen levels fall","The endometrium breaks down and is shed with blood as menstruation"]}
+ ]},
+
+/* ================= FORM 5 ================= */
+{f:5,b:1,t:"Plant tissues and the growth curve",
+ s:"A diagram shows a cross section of a dicotyledonous stem. Tissue X has thick lignified cell walls while tissue Y has thin cell walls and stores food.",
+ parts:[
+  {q:"Name tissue X and tissue Y.",m:2,ans:["X: sclerenchyma tissue","Y: parenchyma tissue"]},
+  {q:"State the function of meristematic tissue.",m:2,ans:["Tissue that actively divides by mitosis","Produces new cells for primary and secondary growth of the plant"]},
+  {q:"Name the four phases of a sigmoid growth curve.",m:3,ans:["Lag phase","Exponential or log phase","Deceleration phase","Stationary phase"]}
+ ]},
+{f:5,b:2,t:"Leaf structure and photosynthesis",
+ s:"A diagram shows a cross section of a leaf. Layer G lies beneath the upper epidermis and contains many chloroplasts, while pore H is found on the lower epidermis.",
+ parts:[
+  {q:"Name layer G and pore H.",m:2,ans:["G: palisade mesophyll","H: stoma"]},
+  {q:"Explain why layer G contains the most chloroplasts.",m:2,ans:["This layer lies closest to the upper surface of the leaf","It receives the highest light intensity, so light absorption for photosynthesis is maximised"]},
+  {q:"State two functions of pore H.",m:2,ans:["Allows gaseous exchange, that is the entry of carbon dioxide and the release of oxygen","Allows the loss of water vapour by transpiration"]},
+  {q:"Explain the meaning of the compensation point.",m:2,ans:["The condition in which the rate of photosynthesis equals the rate of respiration of the plant","There is no net gaseous exchange between the plant and its surroundings at that moment"]}
+ ]},
+{f:5,b:3,t:"Nutrients and absorption in plants",
+ s:"Two spinach plants are grown in culture solutions. Plant J is grown in a complete solution while plant K is grown in a solution lacking magnesium. After two weeks the leaves of plant K turn yellow.",
+ parts:[
+  {q:"State the term for the yellowing of the leaves of plant K.",m:1,ans:["Chlorosis"]},
+  {q:"Explain why magnesium deficiency causes this condition.",m:2,ans:["Magnesium is an essential component of the chlorophyll molecule","Without magnesium, chlorophyll cannot be synthesised, so the leaves lose their green colour"]},
+  {q:"State the function of nitrogen and phosphorus in plants.",m:2,ans:["Nitrogen for the synthesis of protein, nucleic acid and chlorophyll for leaf and shoot growth","Phosphorus for the synthesis of ATP and nucleic acid and for root growth"]},
+  {q:"Explain two features of root hairs that facilitate water absorption.",m:2,ans:["Their large numbers and fine shape give a large total surface area","A wall one cell thick so the diffusion distance for water is short","No cuticle on the surface, so water passes in easily"]}
+ ]},
+{f:5,b:4,t:"Water transport and translocation",
+ s:"A balsam shoot is placed in red eosin solution. After two hours, a cross section of the stem shows only part of the vascular tissue stained red.",
+ parts:[
+  {q:"Name the tissue stained red.",m:1,ans:["Xylem"]},
+  {q:"State the functions of xylem and phloem.",m:2,ans:["Xylem transports water and mineral salts from the roots to the leaves in one direction","Phloem transports the products of photosynthesis, mainly sucrose, from the leaves to other parts in two directions"]},
+  {q:"Explain three mechanisms that enable water to move from the roots to the leaves.",m:4,ans:["Transpirational pull, in which the loss of water vapour from the leaves draws water up the xylem","Cohesion between water molecules maintains a continuous water column","Adhesion between water molecules and the xylem wall helps water cling and rise","Root pressure, which pushes water up from the root to the stem","Capillary action in the narrow xylem vessels"]}
+ ]},
+{f:5,b:5,t:"Plant response and phytohormones",
+ s:"A seedling is placed horizontally in darkness. After three days its shoot curves upwards while its root curves downwards.",
+ parts:[
+  {q:"Name the response shown by the shoot and by the root.",m:2,ans:["Shoot: negative geotropism","Root: positive geotropism"]},
+  {q:"Explain the role of auxin in the shoot response.",m:3,ans:["Auxin accumulates on the lower side of the shoot due to the effect of gravity","The higher auxin concentration stimulates cell elongation on the lower side","Cells on the lower side elongate faster, so the shoot curves upwards"]},
+  {q:"State two applications of phytohormones in agriculture.",m:2,ans:["Auxin applied to stem cuttings to stimulate root formation","Auxin at high concentration used as a selective weedkiller","Ethylene used to accelerate fruit ripening","Gibberellin used to stimulate seed germination and stem elongation"]}
+ ]},
+{f:5,b:6,t:"Sexual reproduction in flowering plants",
+ s:"A diagram shows the structure of a flower. Part L produces pollen grains while part N is located inside the ovary.",
+ parts:[
+  {q:"Name part L and part N.",m:2,ans:["L: anther","N: ovule"]},
+  {q:"Explain the meaning of pollination.",m:2,ans:["The transfer of pollen grains from the anther to the stigma","It may occur on the same flower or on another flower of the same species"]},
+  {q:"Explain the process of fertilisation in a flowering plant after a pollen grain lands on the stigma.",m:4,ans:["The pollen grain germinates and forms a pollen tube that grows down through the style","The pollen tube carries two male nuclei towards the ovule","One male nucleus fuses with the ovum nucleus to form a diploid zygote","The other male nucleus fuses with two polar nuclei to form the triploid endosperm","This process is known as double fertilisation"]}
+ ]},
+{f:5,b:7,t:"Adaptation of plants to habitats",
+ s:"A table shows three plants and their habitats. Cactus grows in a dry habitat, water lily floats on the surface of a pond, and mangrove grows in muddy, saline swamp.",
+ parts:[
+  {q:"State two adaptations of a cactus that reduce water loss.",m:2,ans:["Leaves modified into spines to reduce the surface area for transpiration","A thick waxy cuticle on the stem surface","Few stomata, which are sunken in pits","A succulent stem that stores water"]},
+  {q:"Explain why the stomata of a water lily are located on the upper leaf surface.",m:2,ans:["The lower leaf surface is in the water, so gaseous exchange cannot occur efficiently there","Stomata on the upper surface are exposed to air, so carbon dioxide and oxygen can be exchanged easily"]},
+  {q:"State three adaptations of mangrove plants to their habitat.",m:3,ans:["Buttress and stilt roots for support in soft, unstable mud","Breathing roots or pneumatophores to take in oxygen from the air because the soil is oxygen-poor","Succulent leaves with a thick cuticle to reduce water loss in saline conditions","Salt glands on the leaves to remove excess salt","Seeds that germinate while still attached to the parent plant, that is vivipary"]}
+ ]},
+{f:5,b:8,t:"Biodiversity and conservation",
+ s:"A forest reserve is gazetted as a national park. A survey shows the area contains over 300 plant species and 120 bird species.",
+ parts:[
+  {q:"Explain the meaning of biodiversity.",m:2,ans:["The variety of living things in an area","It covers genetic diversity, species diversity and ecosystem diversity"]},
+  {q:"State two importances of biodiversity to humans.",m:2,ans:["A source of food, medicine and raw materials","Maintains ecosystem balance and nutrient cycles","A source of genes for improving crops and livestock","Value for ecotourism and education"]},
+  {q:"Explain the difference between preservation and conservation.",m:3,ans:["Preservation is the protection of natural resources from disturbance so they remain in their original state","Conservation is the managed and controlled use of resources so that they last","Gazetting a forest reserve is an example of preservation, while replanting trees after selective logging is an example of conservation"]}
+ ]},
+{f:5,b:9,t:"Interactions and energy flow in an ecosystem",
+ s:"A food chain in a paddy field ecosystem is: paddy, grasshopper, frog, snake.",
+ parts:[
+  {q:"State the trophic level of the grasshopper and of the frog.",m:2,ans:["Grasshopper: primary consumer or second trophic level","Frog: secondary consumer or third trophic level"]},
+  {q:"Explain what happens to the grasshopper population if all the snakes are killed.",m:3,ans:["The frog population increases because its predator is removed","The frogs eat more grasshoppers","The grasshopper population decreases"]},
+  {q:"Explain why energy decreases from one trophic level to the next.",m:3,ans:["Most of the energy is lost as heat through respiration","Some energy is lost in waste products and excretion","Some parts of the organism are not eaten or cannot be digested"]}
+ ]},
+{f:5,b:10,t:"Environmental issues and sustainable development",
+ s:"The water of a river flowing through farmland is found to be turbid, foul-smelling and full of algae. The number of fish in the river has fallen sharply.",
+ parts:[
+  {q:"State the name of the process occurring in the river.",m:1,ans:["Eutrophication"]},
+  {q:"Explain how this process causes the death of the fish.",m:4,ans:["Fertiliser run-off supplies excess nitrate and phosphate","Algae multiply rapidly and form an algal bloom on the water surface","The dead algae are broken down by decomposing bacteria","The decomposing bacteria use up large amounts of dissolved oxygen during respiration","The dissolved oxygen concentration falls until the fish die of oxygen shortage"]},
+  {q:"State two measures to prevent this problem from recurring.",m:2,ans:["Limit the use of chemical fertiliser and use organic fertiliser instead","Create buffer zones of vegetation along the riverbank to absorb fertiliser run-off","Treat agricultural waste water before releasing it into the river","Enforce water pollution laws"]}
+ ]},
+{f:5,b:11,t:"Inheritance and Mendel's laws",
+ s:"In a cross, a homozygous dominant purple-flowered pea plant is crossed with a white-flowered plant. Purple colour is represented by allele B and white by allele b.",
+ parts:[
+  {q:"State the genotype of both parent plants.",m:2,ans:["Purple-flowered plant: BB","White-flowered plant: bb"]},
+  {q:"State the genotype and phenotype of the F1 generation.",m:2,ans:["Genotype: all Bb","Phenotype: all purple-flowered"]},
+  {q:"If the F1 generation is self-crossed, state the phenotypic ratio of the F2 generation and show how you obtain it.",m:3,ans:["The cross Bb with Bb produces gametes B and b from both parents","F2 genotypes: 1 BB, 2 Bb, 1 bb","The phenotypic ratio is 3 purple to 1 white"]}
+ ]},
+{f:5,b:12,t:"Variation in a population",
+ s:"The heights of 100 students in a school are recorded and the resulting graph is bell-shaped. The blood groups of the same students fall into only four categories.",
+ parts:[
+  {q:"State the type of variation for height and for blood group.",m:2,ans:["Height: continuous variation","Blood group: discontinuous or discrete variation"]},
+  {q:"State two differences between these two types of variation.",m:2,ans:["Continuous variation has intermediate values while discontinuous variation has distinct categories","Continuous variation is controlled by many genes while discontinuous variation is controlled by one or few genes","Continuous variation is influenced by the environment while discontinuous variation is not"]},
+  {q:"Explain three sources of genetic variation in a population.",m:4,ans:["Gene or chromosome mutation, which produces new alleles","Crossing over during prophase I of meiosis, which produces new gene combinations","Random assortment of homologous chromosomes during metaphase I of meiosis","Random fusion of gametes during fertilisation"]}
+ ]},
+{f:5,b:13,t:"Genetic engineering and its applications",
+ s:"Human insulin is produced commercially by transferring the human insulin gene into the bacterium Escherichia coli.",
+ parts:[
+  {q:"Name the enzyme used to cut out the insulin gene and the enzyme that joins it to the plasmid.",m:2,ans:["Restriction enzyme to cut the DNA","DNA ligase to join the gene to the plasmid"]},
+  {q:"Arrange the main steps in producing insulin by genetic engineering.",m:3,ans:["The insulin gene is cut from human DNA using a restriction enzyme","A plasmid is removed from a bacterium and cut with the same restriction enzyme","The insulin gene is joined to the plasmid using DNA ligase to form recombinant DNA","The recombinant plasmid is inserted back into the bacterium","The bacteria are cultured in a fermenter and produce insulin, which is then extracted and purified"]},
+  {q:"State one benefit and one ethical issue of genetic technology.",m:2,ans:["Benefit: insulin can be produced in large quantities, more cheaply, and suits patients who cannot accept animal insulin","Ethical issue: the long-term effects of genetically modified organisms on health and the environment are still uncertain","Ethical issue: concerns over the privacy of genetic information and misuse of the technology such as human cloning"]}
+ ]}
+];
+/* =======================================================================
+   ESSAY QUESTION BANK — Sections B and C, 20 marks each
+   ======================================================================= */
+const ESEI = [
+/* ================= FORM 4 ================= */
+{f:4,b:2,t:"Cell structure and levels of organisation",
+ s:"The cell is the basic unit of life. Different cells have structures adapted to their functions.",
+ parts:[
+  {q:"Describe the functions of five organelles in an animal cell.",m:6,ans:["The nucleus contains DNA and controls all cell activities","The mitochondrion carries out cellular respiration and produces ATP","Ribosomes are the site of protein synthesis","The Golgi apparatus modifies, packages and transports proteins","Lysosomes contain hydrolytic enzymes to digest damaged organelles and foreign material","The rough endoplasmic reticulum transports protein while the smooth one synthesises lipid","The plasma membrane controls the movement of substances into and out of the cell"]},
+  {q:"Explain how the structure of a red blood cell and a nerve cell is adapted to its function.",m:6,ans:["A red blood cell is biconcave, which increases the surface area for oxygen absorption","A red blood cell has no nucleus so that space for haemoglobin is maximised","A red blood cell is elastic so it can squeeze through narrow capillaries","A nerve cell has a long axon to carry impulses over long distances","A nerve cell has branched dendrites to receive impulses from many other cells","The myelin sheath on the axon speeds up impulse transmission"]},
+  {q:"Explain the levels of organisation in a multicellular organism and why this organisation is necessary.",m:8,ans:["The cell is the basic unit that carries out a specialised function","Similar cells group together to form a tissue such as muscle tissue and epithelial tissue","Several types of tissue combine to form an organ such as the heart and lungs","Several organs work together to form a system such as the circulatory system","Systems interact to form the complete organism","This organisation allows specialisation of function so each process is carried out more efficiently","A large multicellular organism needs a transport system because diffusion alone is insufficient","Division of labour between systems allows the organism to maintain homeostasis"]}
+ ],
+ rangka:{
+  pendahuluan:"State that the cell is the basic unit of structure and function of life, and that a multicellular organism is organised from the cell level up to the organism level.",
+  isi:["Part (a): list five organelles, one short paragraph each with the name and its function. Do not include plant organelles such as chloroplasts, since the question asks about an animal cell.","Part (b): take only two cells and for each, state the structural feature first and then link it to the function. The answer pattern is feature then effect.","Part (c): describe the five levels of organisation in ascending order with examples, then give three reasons why the organisation is needed."],
+  penutup:"Conclude that cell specialisation and the tiered arrangement allow a multicellular organism to carry out life processes efficiently."}
+},
+{f:4,b:3,t:"Movement of substances across a plasma membrane",
+ s:"The plasma membrane is semi-permeable and controls the movement of substances into and out of a cell through several different mechanisms.",
+ parts:[
+  {q:"Describe three passive mechanisms for the movement of substances across a plasma membrane.",m:6,ans:["Simple diffusion is the movement of small molecules such as oxygen down the concentration gradient","Simple diffusion needs no carrier protein and uses no ATP","Osmosis is the diffusion of water molecules through a semi-permeable membrane from higher to lower water concentration","Facilitated diffusion involves carrier or channel proteins for molecules such as glucose","Facilitated diffusion follows the concentration gradient and requires no ATP"]},
+  {q:"Explain active transport and state two examples of it in the human body.",m:6,ans:["Active transport is the movement of substances against the concentration gradient","It requires energy in the form of ATP and specific carrier proteins","Reabsorption of glucose at the proximal convoluted tubule of the kidney","Absorption of glucose and amino acids from the ileum into the blood when the blood concentration is already higher","The sodium-potassium pump on the neurone membrane, which maintains the resting potential"]},
+  {q:"Explain the effect of hypotonic and hypertonic solutions on a plant cell and on a red blood cell.",m:8,ans:["In a hypotonic solution, water enters the plant cell by osmosis","The vacuole enlarges and generates turgor pressure, so the cell becomes turgid","The strong cell wall prevents the plant cell from bursting","In a hypotonic solution, water enters the red blood cell until it swells and bursts, which is haemolysis","The red blood cell bursts because it has no cell wall to withstand the pressure","In a hypertonic solution, water leaves the plant cell and the cytoplasm shrinks","The plasma membrane pulls away from the cell wall, which is plasmolysis","In a hypertonic solution, the red blood cell shrinks and its surface becomes wrinkled, which is crenation"]}
+ ],
+ rangka:{
+  pendahuluan:"Explain that the plasma membrane is semi-permeable and that movement across it may be passive without ATP or active with ATP.",
+  isi:["Part (a): describe simple diffusion, osmosis and facilitated diffusion one by one. Mention the direction of movement and whether a carrier protein is needed.","Part (b): define active transport first, stress the two features of moving against the gradient and needing ATP, then give two examples with their locations.","Part (c): build four blocks — plant cell in hypotonic, red blood cell in hypotonic, plant cell in hypertonic, red blood cell in hypertonic. Use the correct term for each condition."],
+  penutup:"Conclude that the presence of a cell wall makes a plant cell behave differently from an animal cell in the same solution."}
+},
+{f:4,b:5,t:"Enzymes and metabolism",
+ s:"Enzymes are biological catalysts that control almost all metabolic reactions in living cells.",
+ parts:[
+  {q:"Describe six characteristics of enzymes.",m:6,ans:["An enzyme is a protein that functions as a biological catalyst","An enzyme speeds up the rate of reaction by lowering the activation energy","An enzyme is specific, that is one enzyme acts on one substrate only","An enzyme is not permanently changed and can be used repeatedly","An enzyme is required in very small amounts","An enzyme works most efficiently at its optimum temperature and pH","An enzyme is denatured at high temperature or extreme pH"]},
+  {q:"Explain the effect of temperature and pH on the rate of enzyme action.",m:6,ans:["At low temperature the kinetic energy of molecules is low and the frequency of collision between enzyme and substrate decreases","The rate of reaction increases as temperature rises until the optimum temperature is reached","Above the optimum temperature the bonds holding the enzyme's shape break and the enzyme is denatured","The active site changes shape so the substrate can no longer bind","At the optimum pH the rate of enzyme action is at a maximum","A pH that is too high or too low alters the charges at the active site and causes denaturation"]},
+  {q:"Explain the mechanism of enzyme action based on the lock and key hypothesis, and state the importance of enzymes to metabolic processes.",m:8,ans:["The substrate has a shape complementary to the shape of the enzyme's active site","The substrate binds to the active site and forms an enzyme-substrate complex","The enzyme weakens bonds within the substrate and lowers the activation energy","The substrate is converted to product, which is then released from the active site","The enzyme remains unchanged and is free to bind a new substrate molecule","Enzymes allow metabolic reactions to occur at moderate body temperature","Enzymes control metabolic pathways selectively because of their specificity","Without enzymes, reactions such as digestion and cellular respiration would be far too slow to sustain life"]}
+ ],
+ rangka:{
+  pendahuluan:"Define an enzyme as a protein acting as a biological catalyst, and state that metabolism is divided into anabolism and catabolism.",
+  isi:["Part (a): list six characteristics with one sentence of explanation each. Avoid repeating the same characteristic in different words.","Part (b): separate the effect of temperature from the effect of pH. For each, explain the situation below optimum, at optimum, and above optimum.","Part (c): describe the lock and key mechanism step by step, then add three or four reasons why enzymes matter to metabolism."],
+  penutup:"Conclude that the specificity and sensitivity of enzymes to environmental conditions make them the main controllers of all cellular metabolic processes."}
+},
+{f:4,b:7,t:"Cellular respiration and energy production",
+ s:"Cells obtain energy from the oxidation of glucose through cellular respiration, which can occur with or without oxygen.",
+ parts:[
+  {q:"Describe aerobic cellular respiration, including its equation and the sites where it occurs.",m:6,ans:["Aerobic respiration is the complete oxidation of glucose in the presence of oxygen","Glucose and oxygen produce carbon dioxide, water and energy","Glycolysis occurs in the cytoplasm and converts glucose to pyruvic acid","Pyruvic acid enters the mitochondrion and passes through the Krebs cycle","The electron transport chain on the inner mitochondrial membrane produces most of the ATP","One glucose molecule yields far more ATP than in anaerobic respiration"]},
+  {q:"Compare anaerobic respiration in human muscle cells with that in yeast cells.",m:6,ans:["In human muscle cells, glucose is converted to lactic acid","In yeast cells, glucose is converted to ethanol and carbon dioxide","Both occur in the cytoplasm and require no oxygen","Both yield only a small amount of ATP because glucose is not completely oxidised","The process in yeast is called fermentation and is used in brewing and baking","Lactic acid in human muscle causes fatigue and can be oxidised later"]},
+  {q:"Explain the concept of oxygen debt and why the breathing rate stays high after vigorous exercise.",m:8,ans:["During vigorous exercise the oxygen supply to the muscles is insufficient for fully aerobic respiration","Muscle cells switch to anaerobic respiration and produce lactic acid","The amount of oxygen needed to remove this lactic acid is known as the oxygen debt","After exercise the breathing rate and heart rate stay high to supply the extra oxygen","Some lactic acid is oxidised to carbon dioxide and water to release energy","Some lactic acid is transported to the liver and converted back to glucose or glycogen","Once all the lactic acid is removed, the oxygen debt is said to be repaid","The breathing rate then returns to the resting rate"]}
+ ],
+ rangka:{
+  pendahuluan:"State that cellular respiration is the oxidation of nutrients to release energy as ATP, and that it is divided into aerobic and anaerobic respiration.",
+  isi:["Part (a): write the equation first, then the three stages with their sites, namely the cytoplasm and the mitochondrion.","Part (b): use a comparison structure. State the similarities first then the differences in end products, or set out muscle cells first then yeast cells.","Part (c): define oxygen debt, explain how it builds up, then how it is repaid through oxidation and conversion in the liver."],
+  penutup:"Conclude that aerobic respiration is far more efficient, and anaerobic respiration is only a temporary solution that must be settled by repaying the oxygen debt."}
+},
+{f:4,b:8,t:"Respiratory systems and gaseous exchange",
+ s:"Organisms need oxygen for cellular respiration and must remove carbon dioxide. Different respiratory structures have evolved for this purpose.",
+ parts:[
+  {q:"Describe the features of an efficient respiratory surface.",m:6,ans:["A large total surface area for maximum diffusion of gases","A thin wall, one cell thick, so the diffusion distance is short","A moist surface so gases can dissolve before diffusing","A rich blood supply to maintain the gas concentration gradient","Located close to the source of oxygen","Protected, and served by a ventilation system to maintain the concentration gradient"]},
+  {q:"Explain the mechanism of inhalation and exhalation in humans.",m:6,ans:["During inhalation the external intercostal muscles contract and raise the ribs upwards and outwards","The diaphragm muscle contracts and flattens","The volume of the thoracic cavity increases and the air pressure in the lungs falls","Air from outside enters the lungs because the external pressure is higher","During exhalation the external intercostal muscles and diaphragm relax","The volume of the thoracic cavity decreases, air pressure rises, and air leaves the lungs"]},
+  {q:"Compare the respiratory structures and mechanisms of a fish and an insect.",m:8,ans:["A fish uses gills made up of filaments and lamellae","The gill lamellae have a large total surface area and a dense capillary network","Water flows over the gills in one direction and dissolved oxygen diffuses into the blood","Countercurrent flow between water and blood maintains the concentration gradient along the lamellae","An insect uses a tracheal system made up of tracheae and tracheoles","Air enters the body through spiracles on the body surface","Tracheoles deliver oxygen directly to the cells without passing through a blood system","Ventilation occurs through contraction of the insect's abdominal muscles"]}
+ ],
+ rangka:{
+  pendahuluan:"Explain that gaseous exchange occurs by diffusion, so respiratory structures must have particular features to speed up the process.",
+  isi:["Part (a): list six features, and for each state the feature then its effect on the rate of diffusion.","Part (b): separate inhalation from exhalation. Follow the order of muscles, volume, pressure, then direction of airflow.","Part (c): separate the fish from the insect. For each, state the structure, the features of the respiratory surface and the method of ventilation."],
+  penutup:"Conclude that although their structures differ, all respiratory surfaces share the same basic features of being large, thin and moist."}
+},
+{f:4,b:9,t:"Nutrition and the human digestive system",
+ s:"Food that is eaten must be digested into molecules small enough to be absorbed into the blood.",
+ parts:[
+  {q:"Describe the digestion of carbohydrate, protein and lipid, naming the enzymes and their sites of action.",m:6,ans:["Salivary amylase digests starch to maltose in the mouth","Pancreatic amylase digests the remaining starch to maltose in the duodenum","Maltase in the ileum digests maltose to glucose","Pepsin in the stomach digests protein to polypeptide under acidic conditions","Trypsin in the duodenum digests polypeptide to peptide, and erepsin converts it to amino acids","Lipase in the duodenum digests lipid to fatty acids and glycerol after bile has emulsified it"]},
+  {q:"Explain how the structure of the ileum is adapted for the absorption of digested products.",m:6,ans:["The ileum is very long, giving sufficient time for absorption","Its inner wall is folded and bears millions of villi, which increase the total surface area","Each villus epithelial cell has microvilli that further increase the surface area","The villus wall is only one cell thick so the diffusion distance is short","Each villus has a dense capillary network to transport glucose and amino acids","Each villus has a lacteal to absorb the products of lipid digestion"]},
+  {q:"Explain the importance of a balanced diet and the effects of an unbalanced diet on health.",m:8,ans:["A balanced diet contains carbohydrate, protein, lipid, vitamins, minerals, water and fibre in the correct proportions","Carbohydrate and lipid supply energy for daily activity","Protein is needed for growth, tissue repair and the production of enzymes and antibodies","Vitamins and minerals are needed in small amounts to regulate metabolic processes","Fibre helps peristalsis and prevents constipation","Excess energy intake is stored as lipid and leads to obesity, raising the risk of heart disease and diabetes","Protein deficiency causes stunted growth and a weakened immune system","Deficiency of certain vitamins and minerals causes deficiency diseases such as anaemia from lack of iron"]}
+ ],
+ rangka:{
+  pendahuluan:"State that digestion is the breakdown of complex food molecules into simple absorbable molecules, involving both physical and chemical digestion.",
+  isi:["Part (a): split into three blocks for carbohydrate, protein and lipid. For each, follow the order mouth, stomach, duodenum, ileum, naming the enzyme and the product.","Part (b): list six features of the ileum and link each to its effect on the rate of absorption.","Part (c): explain the components of a balanced diet and their functions first, then the effects of excess intake and of deficiency."],
+  penutup:"Conclude that both complete digestion and a balanced diet are needed to maintain health and normal growth."}
+},
+{f:4,b:10,t:"Transport systems in humans",
+ s:"The human circulatory system consists of the heart, blood vessels and blood, supported by the lymphatic system.",
+ parts:[
+  {q:"Describe the structure of the human heart and the path of blood through it.",m:6,ans:["The heart has four chambers: right atrium, left atrium, right ventricle and left ventricle","Deoxygenated blood from the body enters the right atrium through the vena cava","Blood flows to the right ventricle and is pumped to the lungs through the pulmonary artery","Oxygenated blood from the lungs enters the left atrium through the pulmonary vein","Blood flows to the left ventricle and is pumped to the whole body through the aorta","The tricuspid, bicuspid and semilunar valves ensure blood flows in one direction only","The left ventricle wall is thicker because it must pump blood to the whole body"]},
+  {q:"Compare the structure and function of arteries, veins and capillaries.",m:6,ans:["An artery has a thick, muscular and elastic wall to withstand high blood pressure","An artery carries blood away from the heart and has a narrow lumen","A vein has a thinner wall with a wider lumen and carries blood towards the heart","A vein has valves to prevent backflow because its blood pressure is low","A capillary wall is one cell thick to facilitate exchange of substances with the cells","A capillary has a very narrow lumen and forms a dense network within tissues"]},
+  {q:"Explain the role of the lymphatic system and how it complements the circulatory system.",m:8,ans:["Blood pressure in the capillaries forces some plasma out to form tissue fluid","Most tissue fluid is reabsorbed into the capillaries, but some is not","Lymph capillaries collect the excess tissue fluid as lymph","Lymph flows through lymph vessels and eventually returns to the bloodstream through veins in the neck","Without this drainage, fluid would accumulate in the tissues and cause oedema","Lacteals in the villi of the ileum absorb the products of lipid digestion and transport them through the lymphatic system","Lymph nodes contain lymphocytes that produce antibodies and filter pathogens from the lymph","The lymphatic system therefore has roles in transport, body defence and fluid balance"]}
+ ],
+ rangka:{
+  pendahuluan:"Explain that humans have a closed, double circulatory system with the heart as the main pump.",
+  isi:["Part (a): describe the four chambers and valves first, then follow the path of blood in sequence from the vena cava to the aorta.","Part (b): make a three-way comparison. For each vessel, state the wall features, lumen, presence of valves and its function.","Part (c): begin with the formation of tissue fluid, then lymph drainage, then the three roles of the lymphatic system: fluid balance, lipid transport and defence."],
+  penutup:"Conclude that the circulatory and lymphatic systems work together to transport substances and maintain the body's fluid balance."}
+},
+{f:4,b:11,t:"Immunity and body defence",
+ s:"The human body has several layers of defence against pathogens, from physical barriers to the specific immune response.",
+ parts:[
+  {q:"Describe the non-specific body defence mechanisms.",m:6,ans:["The skin acts as a physical barrier preventing the entry of pathogens","Mucus and cilia in the airways trap and remove pathogens","Hydrochloric acid in the stomach destroys bacteria in food","Lysozyme in tears and saliva destroys bacterial cell walls","Phagocytes such as neutrophils and macrophages engulf and digest pathogens by phagocytosis","Blood clotting seals a wound and prevents the entry of pathogens","The inflammatory response increases blood flow to the site of infection"]},
+  {q:"Explain how the specific immune response occurs when an antigen enters the body.",m:6,ans:["A macrophage engulfs the pathogen and displays its antigen","Helper T lymphocytes recognise the antigen and activate the matching B lymphocytes","B lymphocytes multiply and differentiate into plasma cells","Plasma cells produce specific antibodies that bind to that antigen","Antibodies neutralise toxins, agglutinate pathogens and make phagocytosis easier","Some lymphocytes become memory cells that remain in the body for a faster response in future"]},
+  {q:"Compare the four types of immunity and explain the importance of immunisation programmes to society.",m:8,ans:["Natural active immunity is gained after a person recovers from an infection and produces their own antibodies","Artificial active immunity is gained through vaccination, which stimulates antibody and memory cell production","Natural passive immunity is gained when maternal antibodies pass to the fetus through the placenta or to the baby in breast milk","Artificial passive immunity is gained through injection of antiserum containing ready-made antibodies","Active immunity lasts long because memory cells are formed, while passive immunity acts quickly but is temporary","Immunisation programmes protect individuals from dangerous infectious diseases","When a high proportion of the population is immunised, disease spread is blocked through herd immunity","Certain diseases can be greatly reduced or eradicated entirely through comprehensive immunisation"]}
+ ],
+ rangka:{
+  pendahuluan:"State that body defence is divided into non-specific defence, which acts against all pathogens, and specific defence, which acts against a particular antigen.",
+  isi:["Part (a): group into physical barriers, chemical barriers and cellular defence such as phagocytosis.","Part (b): follow the sequence of events from antigen recognition to memory cell formation. The correct order matters for full marks.","Part (c): describe the four types of immunity with examples, then add three or four points on the importance of immunisation, including herd immunity."],
+  penutup:"Conclude that combining the body's natural defences with immunisation programmes gives the most effective protection to individuals and society."}
+},
+{f:4,b:12,t:"Nervous and hormonal coordination",
+ s:"The human body is coordinated by two systems, the nervous system and the endocrine system, which work together to control responses to stimuli.",
+ parts:[
+  {q:"Describe the structure of a neurone and how an impulse is transmitted along it.",m:6,ans:["A neurone has a cell body containing the nucleus","Dendrites receive impulses from other neurones or from receptors","The axon carries impulses away from the cell body","The myelin sheath covers the axon and speeds up impulse transmission","The impulse travels as a wave of electrical charge change along the axon membrane","At the synapse, a neurotransmitter is released to carry the impulse to the next neurone"]},
+  {q:"Explain the pathway of a reflex arc and why reflex action is important.",m:6,ans:["A receptor detects the stimulus and generates an impulse","The afferent neurone carries the impulse to the spinal cord","An interneurone in the spinal cord relays the impulse to the efferent neurone","The efferent neurone carries the impulse to the effector, a muscle or gland","The effector produces the response, such as muscle contraction","The impulse need not pass through the brain, so the response is rapid and protects the body from injury"]},
+  {q:"Compare nervous coordination with hormonal coordination and explain how the two work together during an emergency.",m:8,ans:["Nerve impulses travel along neurones while hormones are transported in the bloodstream","Nervous responses are very rapid while hormonal responses are slower","The effects of nervous coordination are short-lived while hormonal effects last longer","Nervous coordination acts on a specific part while hormones may act on many target organs","During an emergency, nerve impulses are sent to the adrenal gland","The adrenal gland secretes adrenaline into the bloodstream","Adrenaline raises the heart rate, breathing rate and the conversion of glycogen to glucose","Together this prepares the body to act at once, that is the fight or flight response"]}
+ ],
+ rangka:{
+  pendahuluan:"Explain that body coordination involves detecting a stimulus, transmitting information and producing a response, controlled by the nervous and endocrine systems.",
+  isi:["Part (a): describe the parts of a neurone first, then transmission along the axon and across the synapse.","Part (b): list the five components of the reflex arc in the correct order, then state its importance.","Part (c): make a comparison in paragraph form with four points of contrast, then one example of the two working together, the adrenaline response."],
+  penutup:"Conclude that the nervous system gives a rapid response while the hormonal system gives sustained control, and the two complement each other."}
+},
+{f:4,b:13,t:"Homeostasis and the urinary system",
+ s:"Homeostasis is the maintenance of a constant and optimum internal environment despite changes in the external environment.",
+ parts:[
+  {q:"Describe the structure of a nephron and the process of urine formation.",m:6,ans:["A nephron consists of the glomerulus, Bowman's capsule, proximal convoluted tubule, loop of Henle, distal convoluted tubule and collecting duct","Ultrafiltration occurs at the glomerulus when high blood pressure forces water, glucose, amino acids, salts and urea into the Bowman's capsule","Blood cells and plasma proteins are too large to be filtered and remain in the blood","Selective reabsorption occurs at the proximal convoluted tubule, where all glucose and amino acids are reabsorbed","Water is reabsorbed by osmosis at the loop of Henle and collecting duct","The remaining fluid, urine, contains urea, excess salts and water, and flows to the renal pelvis"]},
+  {q:"Explain how the water content of the blood is regulated.",m:6,ans:["The hypothalamus detects changes in the osmotic pressure of the blood","When the blood is too concentrated, the pituitary secretes more ADH","ADH increases the permeability of the collecting duct to water","More water is reabsorbed into the blood and the urine volume decreases","When the blood is too dilute, ADH secretion decreases","Less water is reabsorbed, so urine volume increases and the urine becomes dilute"]},
+  {q:"Explain how body temperature and blood glucose level are regulated, and the importance of homeostasis.",m:8,ans:["When body temperature rises, the blood vessels in the skin undergo vasodilation so more heat is lost","Sweat glands secrete more sweat and the evaporation of sweat cools the body","When body temperature falls, vasoconstriction occurs and shivering of the muscles generates heat","When blood glucose rises, the pancreas secretes insulin","Insulin stimulates the conversion of glucose to glycogen in the liver and glucose uptake by cells","When blood glucose falls, the pancreas secretes glucagon, which converts glycogen back to glucose","Homeostasis keeps temperature and pH at optimum levels so enzymes function efficiently","Without homeostasis, cells would be damaged by extreme changes in osmotic pressure, temperature or solute concentration"]}
+ ],
+ rangka:{
+  pendahuluan:"Define homeostasis and state that it is controlled by negative feedback mechanisms involving a receptor, a control centre and an effector.",
+  isi:["Part (a): name the parts of the nephron first, then follow the order of ultrafiltration, selective reabsorption and urine formation.","Part (b): use the negative feedback structure. Explain the case of blood too concentrated first, then blood too dilute.","Part (c): separate temperature regulation from glucose regulation. For each, give both directions of change, then add two points on the importance of homeostasis."],
+  penutup:"Conclude that homeostasis involves cooperation between several organs and allows body cells to function under stable conditions."}
+},
+{f:4,b:15,t:"Sexual reproduction and development in humans",
+ s:"Sexual reproduction in humans involves gamete production, fertilisation and the development of the embryo in the uterus.",
+ parts:[
+  {q:"Describe the processes of spermatogenesis and oogenesis.",m:6,ans:["Spermatogenesis occurs in the seminiferous tubules of the testis and begins at puberty","Germ cells divide by mitosis then meiosis to produce four spermatids","Each spermatid differentiates into a complete sperm with a head, neck and tail","Oogenesis occurs in the ovary and begins before birth","Meiosis produces one functional ovum and three polar bodies that degenerate","One mature ovum is released each menstrual cycle at ovulation"]},
+  {q:"Explain the role of hormones in the menstrual cycle.",m:6,ans:["FSH from the pituitary stimulates the maturation of ovarian follicles","The enlarging follicle secretes oestrogen","Oestrogen causes the endometrium to thicken and stimulates the LH surge","LH triggers ovulation at about day 14 of the cycle","The corpus luteum forms and secretes progesterone","Progesterone maintains the endometrium, and when its level falls the endometrium is shed as menstruation"]},
+  {q:"Explain the structure and function of the placenta and the importance of maternal health care during pregnancy.",m:8,ans:["The placenta is formed from fetal tissue and the tissue of the uterine wall","The placenta has villi that increase the total surface area for diffusion","Oxygen, glucose, amino acids, vitamins and antibodies diffuse from maternal to fetal blood","Carbon dioxide and urea diffuse from fetal to maternal blood for removal","Maternal and fetal blood do not mix so that maternal blood pressure does not damage fetal vessels and different blood groups do not agglutinate","The placenta also secretes progesterone to maintain the pregnancy","The mother needs a balanced diet rich in folic acid, iron and calcium for healthy fetal development","The mother should avoid alcohol, smoking and certain drugs because these substances can cross the placenta and harm fetal development"]}
+ ],
+ rangka:{
+  pendahuluan:"State that sexual reproduction involves the fusion of haploid gametes from both parents to produce a diploid zygote that develops into a new individual.",
+  isi:["Part (a): separate spermatogenesis from oogenesis. Compare the site, the time of onset and the number of functional gametes produced.","Part (b): follow the chronological order of the menstrual cycle and name the hormone and its effect at each stage.","Part (c): describe the placenta's structure and the substances exchanged first, explain why the bloodstreams do not mix, then add two or three points on maternal health care."],
+  penutup:"Conclude that a successful pregnancy depends on precise hormonal control and on the mother's health care throughout the period."}
+},
+
+/* ================= FORM 5 ================= */
+{f:5,b:2,t:"Leaf structure and photosynthesis",
+ s:"The leaf is the main organ for photosynthesis, gaseous exchange and transpiration in a plant.",
+ parts:[
+  {q:"Describe the structural features of a leaf that adapt it as an organ of photosynthesis.",m:6,ans:["The leaf is broad and thin, giving a large surface area for light absorption","A transparent cuticle and upper epidermis allow light to penetrate to the mesophyll layer","The palisade mesophyll lies in the upper region and contains the most chloroplasts","Air spaces in the spongy mesophyll allow carbon dioxide to diffuse through","Stomata on the lower epidermis allow carbon dioxide to enter","Vascular tissue, the xylem and phloem, supplies water and transports the products of photosynthesis"]},
+  {q:"Explain how the leaf functions as an organ of gaseous exchange and of transpiration.",m:6,ans:["Carbon dioxide diffuses in through the stomata down the concentration gradient","The gas moves through the air spaces of the spongy mesophyll to the mesophyll cells","Oxygen produced by photosynthesis diffuses out through the stomata","Water vapour from the moist surface of the mesophyll cells evaporates into the air spaces","The water vapour then diffuses out through the stomata as transpiration","The rate of transpiration is affected by light intensity, temperature, humidity and air movement"]},
+  {q:"Explain the meaning of the compensation point and how light intensity and carbon dioxide concentration affect the rate of photosynthesis.",m:8,ans:["The compensation point is the condition in which the rate of photosynthesis equals the rate of respiration of the plant","At this point there is no net gaseous exchange between the plant and its surroundings","The compensation point usually occurs at dusk and early morning when light intensity is low","At low light intensity the rate of photosynthesis increases as light intensity rises because light is the limiting factor","At high light intensity the rate levels off because another factor becomes limiting","Increasing carbon dioxide concentration raises the rate of photosynthesis up to an optimum level","Beyond that level the rate levels off because the enzymes and reaction sites are fully in use","Temperature also affects the rate because photosynthesis is controlled by temperature-sensitive enzymes"]}
+ ],
+ rangka:{
+  pendahuluan:"State that the leaf carries out three main functions, photosynthesis, gaseous exchange and transpiration, and its structure is adapted for all three.",
+  isi:["Part (a): arrange the features from the outside inwards: leaf shape, cuticle, epidermis, palisade mesophyll, spongy mesophyll, stomata and vascular tissue. Link each feature to its function.","Part (b): separate gaseous exchange from transpiration. For each, explain the path of movement of the molecules.","Part (c): define the compensation point first, then describe the effects of light intensity and carbon dioxide concentration separately, including the concept of a limiting factor."],
+  penutup:"Conclude that leaf structure represents a compromise between maximising photosynthesis and controlling water loss."}
+},
+{f:5,b:3,t:"Nutrition in plants",
+ s:"Plants require inorganic nutrients from the soil in addition to carbon dioxide and water for healthy growth.",
+ parts:[
+  {q:"Describe the functions of six main inorganic nutrients in plants.",m:6,ans:["Nitrogen for the synthesis of protein, nucleic acid and chlorophyll for leaf growth","Phosphorus for the synthesis of ATP and nucleic acid and for root growth","Potassium for enzyme activation and the control of stomatal opening","Magnesium as a component of the chlorophyll molecule","Calcium for cell wall formation and membrane stability","Iron for chlorophyll synthesis and the action of certain enzymes"]},
+  {q:"Explain how water and mineral salts are absorbed by plant roots.",m:6,ans:["Root hairs provide a large total surface area for absorption","The water concentration in the soil is higher than in the cell sap of the root hair","Water diffuses into the root hair by osmosis through the semi-permeable membrane","Mineral salts are absorbed by diffusion when their concentration in the soil is higher","Mineral salts are absorbed by active transport when their concentration in the soil is lower","Active transport requires ATP from respiration in the root cells together with carrier proteins"]},
+  {q:"Explain the diversity of nutrition in plants with reference to carnivorous plants, parasitic plants and plants in symbiosis.",m:8,ans:["Carnivorous plants such as the pitcher plant grow in soil deficient in nitrogen","They trap insects in the pitcher and digest them with enzymes to obtain nitrogen","Parasitic plants such as Cuscuta do not have sufficient chlorophyll","They produce haustoria that penetrate the host's vascular tissue to absorb water and nutrients","Legume plants form a symbiosis with Rhizobium bacteria in their root nodules","Rhizobium fixes atmospheric nitrogen into a form the plant can use","The plant gives carbohydrate and shelter to the bacteria, so both benefit","Some plants also form a symbiosis with mycorrhizal fungi, which improve phosphorus absorption"]}
+ ],
+ rangka:{
+  pendahuluan:"State that besides carbon dioxide and water, plants require inorganic nutrients in macro and micro quantities for normal growth.",
+  isi:["Part (a): list six nutrients and state the main function of each. Adding the deficiency symptom can strengthen the answer.","Part (b): separate water absorption by osmosis from mineral absorption by diffusion and active transport.","Part (c): build three blocks: carnivorous, parasitic and symbiotic. For each give an example plant, the mechanism and why the adaptation is needed."],
+  penutup:"Conclude that plants have developed various nutritional strategies to overcome nutrient shortages in their particular habitats."}
+},
+{f:5,b:4,t:"Transport in plants",
+ s:"Vascular plants transport water, mineral salts and the products of photosynthesis through xylem and phloem tissue.",
+ parts:[
+  {q:"Compare the structure and function of xylem with phloem.",m:6,ans:["Xylem consists of xylem vessels and tracheids whose cells are dead and lignified","Xylem transports water and mineral salts from roots to leaves in one direction","Xylem cells have no cytoplasm, forming a continuous hollow tube","Phloem consists of sieve tubes and companion cells that are still alive","Phloem transports the products of photosynthesis, mainly sucrose, in two directions","Sieve tubes have perforated sieve plates that allow phloem sap to flow through"]},
+  {q:"Explain the mechanisms that move water from the roots to the leaves.",m:6,ans:["Water is absorbed by root hairs by osmosis, generating root pressure that pushes water upwards","Transpiration from the leaves causes water vapour loss and generates transpirational pull","Cohesion between water molecules maintains a continuous water column in the xylem","Adhesion between water molecules and the xylem vessel wall helps water cling and rise","Capillary action in the narrow xylem vessels also assists upward movement","Together these forces allow water to rise to the top of a tall tree"]},
+  {q:"Explain the process of translocation and the application of phytoremediation in environmental conservation.",m:8,ans:["Translocation is the transport of organic substances, mainly sucrose, through the phloem","Leaves carrying out photosynthesis act as the source","Parts that use or store food, such as roots, fruits and shoots, act as the sink","Sucrose is loaded into the sieve tubes by active transport at the source","The entry of sucrose lowers the water potential so water enters the phloem and generates hydrostatic pressure","The pressure difference between source and sink makes the phloem sap flow towards the sink","Phytoremediation uses selected plants to absorb and accumulate pollutants such as heavy metals from soil and water","This method is cheaper and does not damage soil structure compared with mechanical removal of soil"]}
+ ],
+ rangka:{
+  pendahuluan:"Explain that large plants need vascular tissue because diffusion alone cannot transport substances over long distances.",
+  isi:["Part (a): make a paired comparison. For each point, state the xylem feature then the corresponding phloem feature.","Part (b): list five mechanisms and explain each briefly. Transpirational pull is the most important force and deserves emphasis.","Part (c): explain translocation using the source and sink concept first, then phytoremediation with an example and its advantages."],
+  penutup:"Conclude that the plant transport system is not only vital to the plant's survival but can also be used by humans through phytoremediation."}
+},
+{f:5,b:6,t:"Sexual reproduction in flowering plants",
+ s:"The flower is the sexual reproductive organ of a flowering plant, and its structure is adapted to its method of pollination.",
+ parts:[
+  {q:"Describe the structure of a flower and the function of each of its main parts.",m:6,ans:["The sepals protect the flower during the bud stage","The petals are often brightly coloured to attract pollinating agents","The stamen consists of the anther, which produces pollen, and the filament, which supports it","The stigma receives pollen grains during pollination","The style supports the stigma and provides a path for the pollen tube","The ovary contains the ovules, which hold the female gametes"]},
+  {q:"Compare the features of a wind-pollinated flower with those of an insect-pollinated flower.",m:6,ans:["A wind-pollinated flower has small or absent petals that are not brightly coloured","An insect-pollinated flower has large, brightly coloured and scented petals","A wind-pollinated flower produces no nectar while an insect-pollinated flower produces nectar","The pollen of a wind-pollinated flower is light, small, smooth and produced in large amounts","The pollen of an insect-pollinated flower is larger and sticky or spiky so it clings to the insect's body","The stigma of a wind-pollinated flower is feathery and exposed while that of an insect-pollinated flower is sticky and inside the flower"]},
+  {q:"Explain the process of double fertilisation and the importance of seeds to the survival of a plant species.",m:8,ans:["The pollen grain landing on the stigma germinates and forms a pollen tube","The pollen tube grows down through the style towards the micropyle of the ovule","The pollen tube carries two male nuclei into the embryo sac","One male nucleus fuses with the ovum nucleus to form a diploid zygote that develops into the embryo","The other male nucleus fuses with two polar nuclei to form the triploid endosperm as a food store","Both fusions occur at the same time, which is why it is called double fertilisation","The seed protects the embryo and supplies food during germination","The seed allows the plant to survive unfavourable conditions through dormancy and to disperse to new habitats"]}
+ ],
+ rangka:{
+  pendahuluan:"State that sexual reproduction in flowering plants involves pollination and fertilisation, producing seeds and fruits.",
+  isi:["Part (a): list the parts of the flower from the outside inwards, namely sepals, petals, stamen and carpel, with the function of each.","Part (b): make a paired comparison for petals, nectar, pollen and stigma. Avoid listing the features of only one flower type.","Part (c): follow the sequence from pollen germination to endosperm formation, stress the term double fertilisation, then add three importances of seeds."],
+  penutup:"Conclude that both the structural adaptations of the flower and the formation of seeds increase the chances of survival and dispersal of the species."}
+},
+{f:5,b:7,t:"Adaptation of plants to habitats",
+ s:"Plants show different structural and physiological adaptations depending on their habitat.",
+ parts:[
+  {q:"Describe the adaptations of xerophytes to a dry habitat.",m:6,ans:["Leaves modified into spines to reduce the surface area for transpiration","A thick waxy cuticle reduces water loss through the surface","Few stomata, which are sunken in pits, reduce transpiration","Stomata open only at night when the temperature is lower","A succulent stem stores water for use during drought","Long roots that reach deep into the soil, or widely spreading surface roots, absorb water"]},
+  {q:"Compare the adaptations of hydrophytes with those of xerophytes.",m:6,ans:["Hydrophytes have a very thin cuticle while xerophytes have a thick cuticle","Hydrophytes have many stomata on the upper leaf surface while xerophytes have few sunken stomata","Hydrophytes have broad thin leaves while xerophytes have small or spine-shaped leaves","Hydrophytes have air-filled parenchyma tissue for buoyancy while xerophytes have water-storage tissue","The root system of a hydrophyte is small because water is readily available while xerophyte roots are extensive or deep","Supporting tissue in hydrophytes is poorly developed because water provides support while xerophytes need lignified tissue"]},
+  {q:"Explain the adaptations of mangrove plants to a muddy, saline swamp habitat.",m:8,ans:["Buttress and stilt roots provide extra support in soft and unstable muddy soil","Breathing roots or pneumatophores grow above the mud surface to take in oxygen from the air","Breathing roots are needed because swamp soil is oxygen-poor owing to the high water table","Salt glands on the leaves remove excess salt absorbed along with the water","Some species store salt in old leaves, which are then shed","Succulent leaves with a thick cuticle reduce water loss because water uptake is difficult in saline conditions","Seeds germinate while still attached to the parent plant, that is vivipary","The heavy torpedo-shaped seedling embeds itself in the mud when it falls, so it is not washed away by the tide"]}
+ ],
+ rangka:{
+  pendahuluan:"Explain that an adaptation is a feature that increases a plant's chance of survival in a particular habitat, and that plants are classed as xerophytes, hydrophytes, mesophytes or halophytes.",
+  isi:["Part (a): group the xerophyte adaptations into reducing transpiration, storing water and absorbing water.","Part (b): make a paired comparison for cuticle, stomata, leaf shape, air tissue, roots and supporting tissue.","Part (c): link each mangrove adaptation to the habitat problem it solves, namely unstable soil, oxygen shortage, salinity and tidal water movement."],
+  penutup:"Conclude that every plant adaptation is a specific solution to the physical challenges of its habitat."}
+},
+{f:5,b:9,t:"Ecosystems and interactions between organisms",
+ s:"An ecosystem consists of biotic and abiotic components that interact with one another, with energy flow and nutrient cycling within it.",
+ parts:[
+  {q:"Describe the biotic and abiotic components of an ecosystem.",m:6,ans:["Biotic components are the living components of the ecosystem","Producers such as green plants make food through photosynthesis","Consumers comprise herbivores, carnivores and omnivores that feed on other organisms","Decomposers such as bacteria and fungi break down dead organic matter","Abiotic components are the non-living components such as light, temperature, water, pH and humidity","Abiotic components determine the type and abundance of organisms that can live there"]},
+  {q:"Explain three types of biotic interaction between organisms with examples.",m:6,ans:["Mutualism is an interaction that benefits both parties, for example Rhizobium in the root nodules of legumes","Commensalism benefits one party without harming the other, for example an epiphyte on a tree branch","Parasitism is an interaction in which the parasite benefits and the host is harmed, for example Cuscuta on a host plant","Predation is an interaction in which the predator kills and eats the prey, for example a snake eating a frog","Competition occurs when two organisms compete for the same limited resource","Saprophytism involves organisms that obtain nutrients from dead organic matter"]},
+  {q:"Explain energy flow and the carbon cycle in an ecosystem and why ecosystem balance is important.",m:8,ans:["Energy enters the ecosystem as sunlight and is converted to chemical energy by producers","Energy passes to primary, secondary and tertiary consumers through the food chain","At each trophic level most of the energy is lost as heat through respiration","Some energy is also lost in waste products and uneaten parts, so the energy pyramid narrows upwards","In the carbon cycle, plants absorb carbon dioxide through photosynthesis","Respiration by all organisms and the decomposition of dead organic matter release carbon dioxide back to the atmosphere","Burning fossil fuels adds carbon dioxide and disturbs the balance of this cycle","Ecosystem balance matters because disturbance at one trophic level has knock-on effects on other populations and can cause species extinction"]}
+ ],
+ rangka:{
+  pendahuluan:"Define an ecosystem as a unit made up of a community of organisms interacting with one another and with their physical environment.",
+  isi:["Part (a): separate the biotic components, namely producers, consumers and decomposers, from the abiotic components. Give an example of each.","Part (b): choose only three types of interaction as asked. For each, state the type, the effect on each party and one specific example.","Part (c): separate energy flow from the carbon cycle, then add two or three reasons why ecosystem balance must be maintained."],
+  penutup:"Conclude that energy flows one way and is lost as heat while nutrients cycle, and that human disturbance of these cycles threatens ecosystem stability."}
+},
+{f:5,b:10,t:"Environmental issues and sustainability",
+ s:"Human activity has caused a range of environmental problems that threaten the sustainability of ecosystems and the wellbeing of future generations.",
+ parts:[
+  {q:"Describe three environmental pollution issues and their causes.",m:6,ans:["Air pollution originates from the burning of fossil fuels by vehicles and industry","The release of carbon dioxide contributes to the greenhouse effect and global warming","The release of sulphur dioxide and nitrogen oxides causes acid rain, which damages plants and buildings","Water pollution originates from the discharge of industrial waste, domestic waste and fertiliser run-off from farmland","Fertiliser run-off causes eutrophication, which depletes dissolved oxygen and kills aquatic life","Soil pollution originates from the dumping of toxic waste and plastics and from excessive pesticide use"]},
+  {q:"Explain the effects of deforestation on the environment.",m:6,ans:["Habitat loss causes a decline in biodiversity and the extinction of species","The rate of soil erosion increases because there are no tree roots to bind the soil","Eroded soil flows into rivers, causing sedimentation and flooding","The global rate of photosynthesis falls, so less carbon dioxide is absorbed from the atmosphere","The rise in atmospheric carbon dioxide worsens global warming","The water cycle is disturbed because the rate of transpiration falls and local rainfall patterns change"]},
+  {q:"Explain the measures for environmental conservation and the role of individuals and the community in sustainability.",m:8,ans:["The government gazettes forest reserves, national parks and wildlife reserves to protect habitats","Selective logging and tree replanting ensure that forest resources last","Enforcement of laws such as the Environmental Quality Act controls waste discharge","Using renewable energy such as solar and hydro power reduces the burning of fossil fuels","Treating waste water before releasing it into rivers reduces water pollution","Individuals can practise the principles of reduce, reuse and recycle in daily life","Individuals can use public transport, save energy and water, and avoid single-use plastics","The community can organise awareness campaigns, tree-planting programmes and river clean-up activities"]}
+ ],
+ rangka:{
+  pendahuluan:"State that rapid development and population growth have increased pressure on the environment, making sustainability an urgent need.",
+  isi:["Part (a): choose only three issues as asked, for example air, water and soil pollution. For each, state the cause then the effect.","Part (b): group the effects of deforestation into effects on biodiversity, soil, the atmosphere and the water cycle.","Part (c): separate government-level measures from the roles of individuals and the community, so the answer is balanced as the question requires."],
+  penutup:"Conclude that sustainable development meets the needs of today without compromising the ability of future generations to meet their own."}
+},
+{f:5,b:11,t:"Inheritance and Mendel's laws",
+ s:"Gregor Mendel carried out crosses on pea plants and formulated the laws of inheritance that became the foundation of modern genetics.",
+ parts:[
+  {q:"State and describe two of Mendel's laws.",m:6,ans:["The Law of Segregation states that a pair of alleles for a trait separates during gamete formation","Each gamete receives only one allele from that pair","The alleles recombine randomly during fertilisation","The Law of Independent Assortment states that the alleles for one trait are inherited independently of the alleles for another trait","This law applies to genes located on different chromosomes","This law produces the 9:3:3:1 ratio in a dihybrid cross between two heterozygous individuals"]},
+  {q:"Show a monohybrid cross between two heterozygous individuals and state the genotypic and phenotypic ratios of the F2 generation.",m:6,ans:["Use clear symbols, for example T for the dominant tall allele and t for the recessive short allele","The parental genotypes are Tt and Tt","Each parent produces gametes T and t","The Punnett square produces TT, Tt, Tt and tt","The genotypic ratio is 1 TT : 2 Tt : 1 tt","The phenotypic ratio is 3 tall : 1 short"]},
+  {q:"Explain the inheritance of ABO blood groups and of sex-linked traits in humans.",m:8,ans:["ABO blood group is controlled by three alleles, namely I^A, I^B and I^O","Alleles I^A and I^B are both dominant over I^O but are codominant with each other","Genotypes I^A I^A and I^A I^O give blood group A while I^B I^B and I^B I^O give blood group B","Genotype I^A I^B gives blood group AB while I^O I^O gives blood group O","Sex-linked traits are controlled by genes on the sex chromosomes, mainly the X chromosome","Haemophilia and red-green colour blindness are examples of recessive sex-linked traits","A male has only one X chromosome, so a single recessive allele is enough to express the trait","A female needs two recessive alleles to express the trait, so females are more often carriers only"]}
+ ],
+ rangka:{
+  pendahuluan:"State that inheritance is the transfer of traits from parent to offspring through genes, and that Mendel established its basic principles through his pea plant experiments.",
+  isi:["Part (a): name the law first, then describe its meaning and link it to meiosis.","Part (b): show the full working: symbols, parental genotypes, gametes, Punnett square, then the genotypic and phenotypic ratios. Marks are given for each step, so do not jump straight to the answer.","Part (c): separate ABO blood groups from sex-linked traits. For ABO stress multiple alleles and codominance; for sex linkage stress why males are more affected."],
+  penutup:"Conclude that Mendel's laws remain the basis for understanding inheritance, although patterns such as multiple alleles and sex linkage show that inheritance can be more complex."}
+},
+{f:5,b:12,t:"Variation and natural selection",
+ s:"Individuals within a species show differences in their traits, known as variation, and this variation is the basis of natural selection.",
+ parts:[
+  {q:"Compare continuous with discontinuous variation and give examples.",m:6,ans:["Continuous variation shows a continuous range of values with many intermediate values","Examples of continuous variation are height, body mass and skin colour","Continuous variation is controlled by many genes and influenced by environmental factors","Discontinuous variation shows distinct categories with no intermediate values","Examples of discontinuous variation are ABO blood group, tongue-rolling ability and ear lobe shape","Discontinuous variation is controlled by one or few genes and is not influenced by the environment"]},
+  {q:"Explain the factors that cause genetic variation and environmental variation.",m:6,ans:["Gene or chromosome mutation produces new alleles and new traits","Crossing over during prophase I of meiosis produces new gene combinations on the chromatids","Random assortment of homologous chromosomes during metaphase I produces different gametes","Random fusion of gametes during fertilisation adds further diversity","Environmental factors such as diet influence height and body mass","Factors such as exposure to sunlight influence skin colour even though the genotype is unchanged"]},
+  {q:"Explain the process of natural selection and the importance of variation to the survival of a species.",m:8,ans:["Within a population there is variation of traits between individuals","Resources such as food and space are limited, so competition for survival occurs","Individuals with traits better suited to the environment are more likely to survive","The surviving individuals reproduce and pass the advantageous alleles to the next generation","Less suited individuals fail to survive or reproduce, so their alleles decrease in the population","After many generations the frequency of the advantageous allele increases in the population","Variation matters because when the environment changes or disease strikes, at least some individuals have a chance to survive","A population with little genetic variation is more vulnerable to extinction because all individuals are affected in the same way"]}
+ ],
+ rangka:{
+  pendahuluan:"Define variation as the differences in traits between individuals of the same species, and state that it arises from genetic and environmental factors.",
+  isi:["Part (a): make a paired comparison for distribution, examples, number of genes and environmental influence.","Part (b): separate the genetic causes, namely mutation, crossing over, random assortment and random fertilisation, from the environmental causes.","Part (c): describe natural selection as a sequence: variation, competition, survival of the fittest, reproduction, change in allele frequency. Then add two or three importances of variation."],
+  penutup:"Conclude that variation provides the raw material for natural selection, and without it a species cannot adapt to a changing environment."}
+},
+{f:5,b:13,t:"Genetic technology and its implications",
+ s:"Genetic engineering allows genes to be transferred between organisms and has been widely applied in medicine, agriculture and industry.",
+ parts:[
+  {q:"Describe the main steps in genetic engineering to produce human insulin.",m:6,ans:["The insulin gene is identified and cut from human DNA using a restriction enzyme","A plasmid is removed from a bacterium and cut with the same restriction enzyme so the ends match","The insulin gene is joined to the plasmid using DNA ligase to form recombinant DNA","The recombinant plasmid is inserted back into a bacterium such as Escherichia coli","The bacteria multiply rapidly in a fermenter and every cell carries the insulin gene","The insulin produced is extracted, purified and packaged for use by diabetic patients"]},
+  {q:"Explain three applications of genetic technology in everyday life.",m:6,ans:["In medicine, hormones such as insulin and growth hormone are produced in large quantities and more cheaply","Vaccines and monoclonal antibodies are produced through recombinant DNA technology","Gene therapy is used to treat genetic disease by replacing a faulty gene","In agriculture, genetically modified crops are produced that resist disease, pests and drought","Crops such as golden rice are modified to increase their vitamin A content","In forensics, DNA fingerprinting is used to identify individuals and establish family relationships"]},
+  {q:"Discuss the benefits and the ethical and safety issues associated with genetic technology.",m:8,ans:["The technology allows medicines and hormones to be produced in large quantities at lower cost","Crop yields increase and pest-resistant crops reduce the use of chemical pesticides","Genetic diseases can potentially be treated through gene therapy","The long-term effects of genetically modified organisms on human health are still not fully established","Transferred genes may spread to wild species and disturb ecosystem balance","Genetic diversity is reduced if only one type of modified crop is planted widely","An individual's genetic information could be misused by insurers or employers for discrimination","Human cloning and the modification of a baby's traits raise serious moral and religious questions"]}
+ ],
+ rangka:{
+  pendahuluan:"State that genetic technology involves modifying the genetic material of organisms, and that it has profoundly changed medicine and agriculture.",
+  isi:["Part (a): follow the steps in exact order and name the correct enzyme at each step. A wrong order loses marks even when the facts are right.","Part (b): choose only three fields as asked, for example medicine, agriculture and forensics, with a specific example for each.","Part (c): split the answer into two balanced halves, the benefits and then the ethical and safety issues. A question asking you to discuss requires both sides."],
+  penutup:"Conclude that genetic technology offers great benefits but requires strict legal control and ethical consideration."}
+}
+];
+/* =======================================================================
+   APP
+   ======================================================================= */
+const $ = id => document.getElementById(id);
+const LET = ["A","B","C","D"];
+const ABC = ["(a)","(b)","(c)","(d)","(e)"];
+function esc(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+function mmss(s){ return Math.floor(s/60)+":"+String(s%60).padStart(2,"0"); }
+function hms(s){ const h=Math.floor(s/3600), m=Math.floor(s%3600/60), x=s%60;
+  return (h? h+":"+String(m).padStart(2,"0") : String(m))+":"+String(x).padStart(2,"0"); }
+function marksOf(q){ return q.parts.reduce((a,p)=>a+p.m,0); }
+function gradeOf(p){
+  if(p>=90) return "A+ outstanding";
+  if(p>=80) return "A excellent";
+  if(p>=70) return "A- excellent";
+  if(p>=65) return "B+ high credit";
+  if(p>=60) return "B credit";
+  if(p>=55) return "C+ upper credit";
+  if(p>=50) return "C credit";
+  if(p>=45) return "D upper pass";
+  if(p>=40) return "E pass";
+  return "G fail — needs thorough revision";
+}
+
+/* ---------- navigation with lock ---------- */
+const NAVBTNS = ["tab-k1","tab-k2","m1-lat","m1-uji","m2-lat","m2-uji"];
+function setLock(on){
+  NAVBTNS.forEach(id=>{
+    const b=$(id);
+    b.classList.toggle("lock", on);
+    b.setAttribute("aria-disabled", on ? "true" : "false");
+  });
+}
+function blocked(){
+  if(!examOn) return false;
+  alert("The clock is running. Press \u201CEnd paper\u201D in the top bar if you want to stop.");
+  return true;
+}
+$("tab-k1").onclick = () => { if(!blocked()) tab("k1"); };
+$("tab-k2").onclick = () => { if(!blocked()) tab("k2"); };
+function tab(w){
+  $("tab-k1").classList.toggle("on", w==="k1");
+  $("tab-k2").classList.toggle("on", w==="k2");
+  $("pane-k1").classList.toggle("hidden", w!=="k1");
+  $("pane-k2").classList.toggle("hidden", w!=="k2");
+  window.scrollTo(0,0);
+}
+$("m1-lat").onclick = () => { if(!blocked()) mode1("lat"); };
+$("m1-uji").onclick = () => { if(!blocked()) mode1("uji"); };
+function mode1(w){
+  $("m1-lat").classList.toggle("on", w==="lat");
+  $("m1-uji").classList.toggle("on", w==="uji");
+  $("k1-lat").classList.toggle("hidden", w!=="lat");
+  $("k1-uji").classList.toggle("hidden", w!=="uji");
+}
+$("m2-lat").onclick = () => { if(!blocked()) mode2("lat"); };
+$("m2-uji").onclick = () => { if(!blocked()) mode2("uji"); };
+function mode2(w){
+  $("m2-lat").classList.toggle("on", w==="lat");
+  $("m2-uji").classList.toggle("on", w==="uji");
+  $("k2-lat").classList.toggle("hidden", w!=="lat");
+  $("k2-uji").classList.toggle("hidden", w!=="uji");
+}
+
+/* ---------- bab dropdowns ---------- */
+function fillBab(formSel, babSel){
+  const f = +$(formSel).value, b = $(babSel);
+  b.innerHTML = "<option value=\"0\">All chapters</option>";
+  const add = form => BAB[form].forEach((nama,i)=>{
+    const o=document.createElement("option");
+    o.value=form+":"+(i+1);
+    o.textContent="F"+form+" Ch "+(i+1)+" — "+nama;
+    b.appendChild(o);
+  });
+  if(f===0){ add(4); add(5); } else { add(f); }
+}
+$("o-form").onchange = () => { fillBab("o-form","o-bab"); updateCount(); };
+$("o-bab").onchange = updateCount;
+$("s-form").onchange = () => { fillBab("s-form","s-bab"); updateCount2(); };
+$("s-bab").onchange = updateCount2;
+$("s-type").onchange = updateCount2;
+fillBab("o-form","o-bab");
+fillBab("s-form","s-bab");
+
+function filt(arr, formSel, babSel){
+  const f = +$(formSel).value, bv = $(babSel).value;
+  return arr.filter(q=>{
+    if(bv && bv!=="0"){ const [ff,bb]=bv.split(":").map(Number); return q.f===ff && q.b===bb; }
+    return f===0 || q.f===f;
+  });
+}
+function updateCount(){
+  $("o-count").textContent = filt(OBJ,"o-form","o-bab").length + " questions available for this selection.";
+}
+updateCount();
+function pick2(){
+  const type=$("s-type").value;
+  return {
+    s: type==="esei" ? [] : filt(STR,"s-form","s-bab"),
+    e: type==="str"  ? [] : filt(ESEI,"s-form","s-bab")
+  };
+}
+function updateCount2(){
+  const {s,e}=pick2();
+  $("s-count").textContent = s.length+" structured and "+e.length+" essay questions available for this selection.";
+}
+updateCount2();
+
+/* =======================================================================
+   TIMER
+   ======================================================================= */
+let examOn=false, examLeft=0, examTick=null, examOnEnd=null;
+function startExam(name, seconds, onEnd){
+  examOn=true; examLeft=seconds; examOnEnd=onEnd;
+  $("ex-name").textContent=name;
+  $("exambar").classList.add("on");
+  setLock(true);
+  paintClock();
+  clearInterval(examTick);
+  examTick=setInterval(()=>{
+    examLeft--;
+    paintClock();
+    if(examLeft<=0){ const f=examOnEnd; stopExam(); if(f) f(true); }
+  },1000);
+}
+function paintClock(){
+  const c=$("ex-clock");
+  c.textContent=hms(Math.max(0,examLeft));
+  c.classList.toggle("warn", examLeft<=600 && examLeft>300);
+  c.classList.toggle("crit", examLeft<=300);
+}
+function stopExam(){
+  examOn=false; clearInterval(examTick); examTick=null;
+  $("exambar").classList.remove("on");
+  setLock(false);
+}
+$("ex-quit").onclick = () => {
+  if(!examOn) return;
+  if(!confirm("End the paper now and see the results?")) return;
+  const f=examOnEnd; stopExam(); if(f) f(false);
+};
+
+/* =======================================================================
+   KERTAS 1 — LATIHAN
+   ======================================================================= */
+let quiz=[], idx=0, score=0, answers=[], t0=0, ltimer=null, latTimed=false;
+
+$("o-start").onclick = () => {
+  const pool = filt(OBJ,"o-form","o-bab");
+  if(!pool.length){ $("o-count").textContent="No questions for this selection. Choose another chapter."; return; }
+  const want=+$("o-len").value;
+  quiz = shuffle(pool).slice(0, Math.min(want, pool.length));
+  idx=0; score=0; answers=[];
+  const mv=$("o-mins").value;
+  const mins = mv==="auto" ? Math.min(180, Math.max(1, Math.round(quiz.length*1.875))) : +mv;
+  latTimed = mins>0;
+  $("k1-setup").classList.add("hidden");
+  $("k1-done").classList.add("hidden");
+  $("k1-run").classList.remove("hidden");
+  $("o-total").textContent=quiz.length;
+  t0=Date.now();
+  clearInterval(ltimer);
+  ltimer=setInterval(()=>{ $("o-time").textContent=mmss(Math.floor((Date.now()-t0)/1000)); },1000);
+  $("o-time").textContent="0:00";
+  if(latTimed) startExam("Practice · "+quiz.length+" questions", mins*60, endLatByTime);
+  drawQ();
+  window.scrollTo(0,0);
+};
+function endLatByTime(expired){
+  if(expired) alert("Time is up. The practice has ended.");
+  finishLat();
+}
+function drawQ(){
+  const q=quiz[idx];
+  $("o-pos").textContent=idx+1;
+  $("o-sc").textContent=score;
+  $("o-prog").style.width=(idx/quiz.length*100)+"%";
+  let h="<div class=\"qhead\"><span class=\"qnum\">"+(idx+1)+"</span><div style=\"flex:1\"><p class=\"qtext\">"+esc(q.q)+"</p></div></div>"
+       +"<p class=\"tagline\">Form "+q.f+" · Chapter "+q.b+" — "+esc(BAB[q.f][q.b-1])+"</p>";
+  if(q.s) h+="<div class=\"stim\">"+esc(q.s)+"</div>";
+  h+="<ul class=\"opts\">";
+  q.o.forEach((op,i)=>{ h+="<li><button class=\"opt\" data-i=\""+i+"\"><span class=\"ltr\">"+LET[i]+"</span><span>"+esc(op)+"</span></button></li>"; });
+  h+="</ul><div id=\"o-verd\"></div>";
+  $("o-body").innerHTML=h;
+  $("o-body").querySelectorAll(".opt").forEach(b=>{ b.onclick=()=>pick(+b.dataset.i); });
+}
+function pick(i){
+  const q=quiz[idx], ok=(i===q.a);
+  if(ok) score++;
+  answers.push({q:q,chosen:i,correct:ok});
+  $("o-body").querySelectorAll(".opt").forEach((b,j)=>{
+    b.disabled=true;
+    if(j===q.a) b.classList.add("right");
+    else if(j===i) b.classList.add("wrong");
+    else b.classList.add("dim");
+  });
+  $("o-verd").innerHTML="<div class=\"verdict\"><b class=\""+(ok?"ok":"no")+"\">"
+    +(ok?"Correct.":"Wrong. Answer: "+LET[q.a]+".")+"</b><br>"+esc(q.e)+"</div>"
+    +"<div class=\"nav\"><button class=\"act\" id=\"o-next\">"+(idx+1<quiz.length?"Next question":"See results")+"</button></div>";
+  $("o-sc").textContent=score;
+  $("o-next").onclick=()=>{ if(idx+1<quiz.length){ idx++; drawQ(); window.scrollTo(0,0);} else finishLat(); };
+}
+function finishLat(){
+  clearInterval(ltimer);
+  if(examOn) stopExam();
+  $("k1-run").classList.add("hidden");
+  const pct=Math.round(score/quiz.length*100), secs=Math.floor((Date.now()-t0)/1000);
+  const byBab={};
+  answers.forEach(a=>{ const k=a.q.f+":"+a.q.b; byBab[k]=byBab[k]||{n:0,r:0}; byBab[k].n++; if(a.correct) byBab[k].r++; });
+  let h="<p class=\"score\">"+pct+"<small>%</small></p><p class=\"grade\">"+gradeOf(pct)+"</p>"
+   +"<p class=\"tagline flush\">"+score+" correct out of "+quiz.length+" questions · time "+mmss(secs)+"</p>";
+  const unseen=quiz.length-answers.length;
+  if(unseen>0) h+="<p class=\"tagline flush\">"+unseen+" questions were left unanswered because time ran out. They are counted as wrong.</p>";
+  h+="<h2>Breakdown by chapter</h2><table><tr><th>Chapter</th><th style=\"text-align:right\">Correct</th></tr>";
+  Object.keys(byBab).sort((a,b)=>{const[x1,y1]=a.split(":").map(Number),[x2,y2]=b.split(":").map(Number);return x1-x2||y1-y2;}).forEach(k=>{
+    const [f,b]=k.split(":");
+    h+="<tr><td>F"+f+" C"+b+" — "+esc(BAB[f][b-1])+"</td><td class=\"n\">"+byBab[k].r+"/"+byBab[k].n+"</td></tr>"; });
+  h+="</table>";
+  const wrong=answers.filter(a=>!a.correct);
+  if(wrong.length){
+    h+="<h2>Questions to revise</h2>";
+    wrong.forEach(a=>{
+      h+="<div class=\"review\"><p class=\"qq\">"+esc(a.q.q)+"</p>"
+        +"<p class=\"ln\"><span>Your answer:</span> "+LET[a.chosen]+" — "+esc(a.q.o[a.chosen])+"</p>"
+        +"<p class=\"ln\"><span>Correct answer:</span> "+LET[a.q.a]+" — "+esc(a.q.o[a.q.a])+"</p>"
+        +"<p class=\"ln\"><span>"+esc(BAB[a.q.f][a.q.b-1])+"</span></p><p class=\"ln\">"+esc(a.q.e)+"</p></div>";
+    });
+  } else h+="<h2>No mistakes</h2><p>Every answer was correct. Try another chapter or increase the number of questions.</p>";
+  h+="<div class=\"nav\"><button class=\"act\" id=\"o-again\">New practice</button></div>";
+  $("k1-done").innerHTML=h;
+  $("k1-done").classList.remove("hidden");
+  $("o-again").onclick=()=>{ $("k1-done").classList.add("hidden"); $("k1-setup").classList.remove("hidden"); window.scrollTo(0,0); };
+  window.scrollTo(0,0);
+}
+
+/* =======================================================================
+   KERTAS 1 — KERTAS PENUH (40 soalan / 1 jam 15 minit)
+   ======================================================================= */
+let ex1=[], ex1ans=[], ex1i=0, k1Score=null;
+
+$("k1e-start").onclick = () => {
+  if(!confirm("The 1 hour 15 minute clock will start now and the questions will be shown.\n\nYou cannot pause. Continue?")) return;
+  /* satu soalan daripada setiap 28 bab, kemudian 12 soalan tambahan secara rawak */
+  const chosen=[], used=new Set();
+  [4,5].forEach(f=>{ BAB[f].forEach((_,i)=>{
+    const pool=OBJ.filter(q=>q.f===f&&q.b===i+1);
+    const pickq=shuffle(pool)[0];
+    if(pickq){ chosen.push(pickq); used.add(pickq.q); }
+  });});
+  const rest=shuffle(OBJ.filter(q=>!used.has(q.q)));
+  while(chosen.length<40 && rest.length) chosen.push(rest.pop());
+  ex1=shuffle(chosen).slice(0,40);
+  ex1ans=new Array(ex1.length).fill(null); ex1i=0;
+  $("k1e-setup").classList.add("hidden");
+  $("k1e-done").classList.add("hidden");
+  $("k1e-run").classList.remove("hidden");
+  drawEx1(); drawGrid();
+  startExam("Paper 1 · 40 questions", 75*60, autoEnd1);
+  window.scrollTo(0,0);
+};
+function autoEnd1(expired){
+  if(expired) alert("Time is up. The paper has been submitted automatically.");
+  gradeEx1();
+}
+function drawEx1(){
+  const q=ex1[ex1i];
+  let h="<div class=\"qhead\"><span class=\"qnum\">"+(ex1i+1)+"</span><div style=\"flex:1\"><p class=\"qtext\">"+esc(q.q)+"</p></div></div>"
+       +"<p class=\"tagline\">Question "+(ex1i+1)+" of 40</p>";
+  if(q.s) h+="<div class=\"stim\">"+esc(q.s)+"</div>";
+  h+="<ul class=\"opts\">";
+  q.o.forEach((op,i)=>{
+    h+="<li><button class=\"opt"+(ex1ans[ex1i]===i?" sel":"")+"\" data-i=\""+i+"\"><span class=\"ltr\">"+LET[i]+"</span><span>"+esc(op)+"</span></button></li>";
+  });
+  h+="</ul>";
+  $("k1e-body").innerHTML=h;
+  $("k1e-body").querySelectorAll(".opt").forEach(b=>{
+    b.onclick=()=>{
+      ex1ans[ex1i]=+b.dataset.i;
+      if(ex1i<ex1.length-1){ ex1i++; } 
+      drawEx1(); drawGrid(); window.scrollTo(0,0);
+    };
+  });
+  $("k1e-left").textContent = ex1ans.filter(a=>a===null).length + " questions not yet answered.";
+}
+function drawGrid(){
+  let h="";
+  for(let i=0;i<ex1.length;i++){
+    h+="<button class=\"gcell"+(ex1ans[i]!==null?" ans":"")+(i===ex1i?" now":"")+"\" data-i=\""+i+"\">"+(i+1)+"</button>";
+  }
+  $("k1e-grid").innerHTML=h;
+  $("k1e-grid").querySelectorAll(".gcell").forEach(b=>{
+    b.onclick=()=>{ ex1i=+b.dataset.i; drawEx1(); drawGrid(); window.scrollTo(0,0); };
+  });
+}
+$("k1e-prev").onclick=()=>{ if(ex1i>0){ ex1i--; drawEx1(); drawGrid(); window.scrollTo(0,0);} };
+$("k1e-next").onclick=()=>{ if(ex1i<ex1.length-1){ ex1i++; drawEx1(); drawGrid(); window.scrollTo(0,0);} };
+$("k1e-submit").onclick=()=>{
+  const blank=ex1ans.filter(a=>a===null).length;
+  if(blank && !confirm(blank+" questions are not yet answered. Submit the paper now?")) return;
+  stopExam(); gradeEx1();
+};
+function gradeEx1(){
+  let sc=0; const byBab={};
+  ex1.forEach((q,i)=>{
+    const ok=(ex1ans[i]===q.a); if(ok) sc++;
+    const k=q.f+":"+q.b; byBab[k]=byBab[k]||{n:0,r:0}; byBab[k].n++; if(ok) byBab[k].r++;
+  });
+  k1Score=sc;
+  $("k1e-run").classList.add("hidden");
+  const pct=Math.round(sc/40*100);
+  let h="<p class=\"score\">"+sc+"<small>/40</small></p><p class=\"grade\">"+pct+"% · "+gradeOf(pct)+"</p>"
+   +"<p class=\"tagline flush\">This mark is combined with Paper 2 if you sit the full Paper 2 in the same session.</p>"
+   +"<h2>Breakdown by chapter</h2><table><tr><th>Chapter</th><th style=\"text-align:right\">Correct</th></tr>";
+  Object.keys(byBab).sort((a,b)=>{const[x1,y1]=a.split(":").map(Number),[x2,y2]=b.split(":").map(Number);return x1-x2||y1-y2;}).forEach(k=>{
+    const [f,b]=k.split(":");
+    h+="<tr><td>F"+f+" C"+b+" — "+esc(BAB[f][b-1])+"</td><td class=\"n\">"+byBab[k].r+"/"+byBab[k].n+"</td></tr>";
+  });
+  h+="</table><h2>Answer review</h2>";
+  let anyWrong=false;
+  ex1.forEach((q,i)=>{
+    if(ex1ans[i]===q.a) return;
+    anyWrong=true;
+    h+="<div class=\"review\"><p class=\"qq\">"+(i+1)+". "+esc(q.q)+"</p>"
+      +"<p class=\"ln\"><span>Your answer:</span> "+(ex1ans[i]===null?"no answer":LET[ex1ans[i]]+" — "+esc(q.o[ex1ans[i]]))+"</p>"
+      +"<p class=\"ln\"><span>Correct answer:</span> "+LET[q.a]+" — "+esc(q.o[q.a])+"</p>"
+      +"<p class=\"ln\"><span>"+esc(BAB[q.f][q.b-1])+"</span></p><p class=\"ln\">"+esc(q.e)+"</p></div>";
+  });
+  if(!anyWrong) h+="<p>All 40 answers were correct.</p>";
+  h+="<div class=\"nav\"><button class=\"act\" id=\"k1e-again\">New paper</button></div>";
+  $("k1e-done").innerHTML=h;
+  $("k1e-done").classList.remove("hidden");
+  $("k1e-again").onclick=()=>{ $("k1e-done").classList.add("hidden"); $("k1e-setup").classList.remove("hidden"); window.scrollTo(0,0); };
+  window.scrollTo(0,0);
+}
+
+/* =======================================================================
+   KERTAS 2 — LATIHAN
+   ======================================================================= */
+let lat2Timed=false;
+
+$("s-start").onclick = () => {
+  const {s,e}=pick2();
+  if(!s.length && !e.length){ $("s-count").textContent="No questions for this selection. Choose another chapter."; return; }
+  const mv=$("s-mins").value;
+  const mins = mv==="auto" ? Math.min(180, s.length*11 + e.length*30) : +mv;
+  lat2Timed = mins>0;
+  let h="";
+  if(s.length){
+    h+="<h3 class=\"sec\">Structured questions</h3><p class=\"secnote\">As in Section A. The marks for each question are shown in its heading.</p>";
+    s.forEach((q,i)=>{ h+=cardStr(q,"ps"+i,i+1); });
+  }
+  if(e.length){
+    h+="<h3 class=\"sec\">Essay questions</h3><p class=\"secnote\">As in Sections B and C, 20 marks each. An answer outline is provided.</p>";
+    e.forEach((q,i)=>{ h+=cardEsei(q,"pe"+i,i+1); });
+  }
+  $("s-body").innerHTML=h;
+  wireReveal($("s-body"));
+  $("k2l-setup").classList.add("hidden");
+  $("k2l-done").classList.add("hidden");
+  $("k2l-run").classList.remove("hidden");
+  if(lat2Timed) startExam("Paper 2 practice · "+(s.length+e.length)+" questions", mins*60, endLat2);
+  window.scrollTo(0,0);
+};
+$("s-end").onclick = () => {
+  if(lat2Timed && examOn){ if(!confirm("End the practice and open all schemes?")) return; stopExam(); }
+  endLat2(false);
+};
+function endLat2(expired){
+  if(expired) alert("Time is up. All answer schemes are now open.");
+  if(examOn) stopExam();
+  lat2Timed=false;
+  $("s-body").querySelectorAll(".skema,.rangka").forEach(el=>el.classList.remove("hidden"));
+  $("s-body").querySelectorAll("button.rev").forEach(b=>b.classList.add("hidden"));
+  $("s-end").classList.add("hidden");
+  $("k2l-done").innerHTML="<h2>Check your answers</h2>"
+   +"<p class=\"tagline flush\">All outlines and suggested schemes above are now open. Mark yourself strictly: "
+   +"in Biology one mark is given for one accurate point, and a wrong term earns nothing even when the idea is nearly right.</p>"
+   +"<div class=\"nav\"><button class=\"act\" id=\"s-again\">New practice</button></div>";
+  $("k2l-done").classList.remove("hidden");
+  $("s-again").onclick=()=>{
+    $("k2l-done").classList.add("hidden");
+    $("k2l-run").classList.add("hidden");
+    $("s-end").classList.remove("hidden");
+    $("k2l-setup").classList.remove("hidden");
+    window.scrollTo(0,0);
+  };
+  window.scrollTo(0,0);
+}
+function cardStr(q,uid,no){
+  let h="<div class=\"scard\"><h4>"+no+". "+esc(q.t)+" ["+marksOf(q)+" marks]</h4>"
+   +"<p class=\"tagline flush\">Form "+q.f+" · Chapter "+q.b+" — "+esc(BAB[q.f][q.b-1])+"</p>"
+   +"<div class=\"stim flush\">"+esc(q.s)+"</div>";
+  q.parts.forEach((p,pi)=>{
+    h+="<div class=\"part\"><div class=\"pq\"><span class=\"pl\">"+ABC[pi]+"</span><span>"+esc(p.q)
+     +" <span class=\"mk\">["+p.m+" marks]</span></span></div>"
+     +"<textarea rows=\"3\" placeholder=\"Write your answer here\"></textarea>"
+     +"<div><button class=\"ghost rev\" data-t=\""+uid+"-"+pi+"\" style=\"margin-top:8px\">Show suggested answer</button></div>"
+     +"<div class=\"skema hidden\" id=\""+uid+"-"+pi+"\"><span class=\"lab\">Suggested answer ["+p.m+" marks]</span><ul>"
+     +p.ans.map(a=>"<li>"+esc(a)+"</li>").join("")+"</ul></div></div>";
+  });
+  return h+"</div>";
+}
+function cardEsei(q,uid,no){
+  let h="<div class=\"scard\"><h4>"+no+". "+esc(q.t)+" [20 marks]</h4>"
+   +"<p class=\"tagline flush\">Form "+q.f+" · Chapter "+q.b+" — "+esc(BAB[q.f][q.b-1])+"</p>"
+   +"<div class=\"stim flush\">"+esc(q.s)+"</div>"
+   +"<div><button class=\"ghost rev\" data-t=\""+uid+"-r\">Show answer outline</button></div>"
+   +"<div class=\"rangka hidden\" id=\""+uid+"-r\"><span class=\"lab\">Answer outline</span>"
+   +"<p><b>Introduction.</b> "+esc(q.rangka.pendahuluan)+"</p>"
+   +"<p><b>Body.</b></p><ol>"+q.rangka.isi.map(x=>"<li>"+esc(x)+"</li>").join("")+"</ol>"
+   +"<p><b>Conclusion.</b> "+esc(q.rangka.penutup)+"</p></div>";
+  q.parts.forEach((p,pi)=>{
+    h+="<div class=\"part\"><div class=\"pq\"><span class=\"pl\">"+ABC[pi]+"</span><span>"+esc(p.q)
+     +" <span class=\"mk\">["+p.m+" marks]</span></span></div>"
+     +"<textarea rows=\"5\" placeholder=\"Write your answer here\"></textarea>"
+     +"<div><button class=\"ghost rev\" data-t=\""+uid+"-"+pi+"\" style=\"margin-top:8px\">Show suggested points</button></div>"
+     +"<div class=\"skema hidden\" id=\""+uid+"-"+pi+"\"><span class=\"lab\">Suggested points ["+p.m+" marks]</span><ul>"
+     +p.ans.map(a=>"<li>"+esc(a)+"</li>").join("")+"</ul></div></div>";
+  });
+  return h+"</div>";
+}
+function wireReveal(root){
+  root.querySelectorAll("button.rev").forEach(btn=>{
+    const base=btn.textContent;
+    btn.onclick=()=>{
+      const el=$(btn.dataset.t), show=el.classList.contains("hidden");
+      el.classList.toggle("hidden");
+      btn.textContent = show ? base.replace("Show","Hide") : base;
+    };
+  });
+}
+
+/* =======================================================================
+   KERTAS 2 — KERTAS PENUH (2 jam 30 minit)
+   Section A: 8 structured (4 x 7 + 4 x 8 = 60)
+   Section B: 2 essays, answer one (20)
+   Section C: 1 essay (20)
+   ======================================================================= */
+let ex2A=[], ex2B=[], ex2C=null;
+
+$("k2e-start").onclick = () => {
+  if(!confirm("The 2 hour 30 minute clock will start now and the questions will be shown.\n\nYou cannot pause. Continue?")) return;
+  const m7=shuffle(STR.filter(q=>marksOf(q)===7)).slice(0,4);
+  const m8=shuffle(STR.filter(q=>marksOf(q)===8)).slice(0,4);
+  ex2A=shuffle(m7.concat(m8));
+  const pool=shuffle(ESEI);
+  ex2B=[pool[0],pool[1]];
+  ex2C=pool[2];
+  let h="<h3 class=\"sec\">Section A [60 marks]</h3>"
+   +"<p class=\"secnote\">Answer all questions. Suggested time 90 minutes.</p>";
+  ex2A.forEach((q,i)=>{ h+=examCardStr(q,"ea"+i,i+1); });
+  h+="<h3 class=\"sec\">Section B [20 marks]</h3>"
+   +"<p class=\"secnote\">Answer one question only. Suggested time 30 minutes.</p>";
+  ex2B.forEach((q,i)=>{ h+=examCardEsei(q,"eb"+i,i+9); });
+  h+="<h3 class=\"sec\">Section C [20 marks]</h3>"
+   +"<p class=\"secnote\">Answer this question. Suggested time 30 minutes.</p>"
+   +examCardEsei(ex2C,"ec0",11);
+  $("k2e-body").innerHTML=h;
+  $("k2e-setup").classList.add("hidden");
+  $("k2e-done").classList.add("hidden");
+  $("k2e-run").classList.remove("hidden");
+  startExam("Paper 2 · Sections A, B and C", 150*60, autoEnd2);
+  window.scrollTo(0,0);
+};
+function examCardStr(q,uid,no){
+  const m=marksOf(q);
+  let h="<div class=\"scard\"><h4>Question "+no+" · Form "+q.f+" ["+m+" marks]</h4>"
+   +"<p class=\"tagline flush\">"+esc(q.t)+"</p>"
+   +"<div class=\"stim flush\">"+esc(q.s)+"</div>";
+  q.parts.forEach((p,pi)=>{
+    h+="<div class=\"part\"><div class=\"pq\"><span class=\"pl\">"+ABC[pi]+"</span><span>"+esc(p.q)
+     +" <span class=\"mk\">["+p.m+" marks]</span></span></div>"
+     +"<textarea rows=\"3\" placeholder=\"Write your answer here\"></textarea>"
+     +"<div class=\"skema hidden\" id=\""+uid+"-"+pi+"\"><span class=\"lab\">Suggested answer ["+p.m+" marks]</span><ul>"
+     +p.ans.map(a=>"<li>"+esc(a)+"</li>").join("")+"</ul></div></div>";
+  });
+  h+="<div class=\"selfmark hidden\" id=\""+uid+"-sm\"><span>My mark for question "+no+" (0-"+m+")</span>"
+   +"<input class=\"mk sm\" type=\"number\" min=\"0\" max=\""+m+"\" step=\"1\" value=\"0\" data-max=\""+m+"\"></div>";
+  return h+"</div>";
+}
+function examCardEsei(q,uid,no){
+  let h="<div class=\"scard\"><h4>Question "+no+" · Form "+q.f+" [20 marks]</h4>"
+   +"<p class=\"tagline flush\">"+esc(q.t)+"</p>"
+   +"<div class=\"stim flush\">"+esc(q.s)+"</div>";
+  q.parts.forEach((p,pi)=>{
+    h+="<div class=\"part\"><div class=\"pq\"><span class=\"pl\">"+ABC[pi]+"</span><span>"+esc(p.q)
+     +" <span class=\"mk\">["+p.m+" marks]</span></span></div>"
+     +"<textarea rows=\"5\" placeholder=\"Answer only if you choose this question\"></textarea>"
+     +"<div class=\"skema hidden\" id=\""+uid+"-"+pi+"\"><span class=\"lab\">Suggested points ["+p.m+" marks]</span><ul>"
+     +p.ans.map(a=>"<li>"+esc(a)+"</li>").join("")+"</ul></div></div>";
+  });
+  h+="<div class=\"rangka hidden\" id=\""+uid+"-r\"><span class=\"lab\">Answer outline</span>"
+   +"<p><b>Introduction.</b> "+esc(q.rangka.pendahuluan)+"</p>"
+   +"<p><b>Body.</b></p><ol>"+q.rangka.isi.map(x=>"<li>"+esc(x)+"</li>").join("")+"</ol>"
+   +"<p><b>Conclusion.</b> "+esc(q.rangka.penutup)+"</p></div>"
+   +"<div class=\"selfmark hidden\" id=\""+uid+"-sm\"><span>My mark for question "+no+" (0-20, leave 0 if not answered)</span>"
+   +"<input class=\"mk sm\" type=\"number\" min=\"0\" max=\"20\" step=\"1\" value=\"0\" data-max=\"20\"></div>";
+  return h+"</div>";
+}
+function autoEnd2(expired){
+  if(expired) alert("Time is up. The answer schemes are now shown.");
+  revealPaper2();
+}
+$("k2e-submit").onclick=()=>{
+  if(!confirm("End the paper and show the answer schemes?")) return;
+  stopExam(); revealPaper2();
+};
+function revealPaper2(){
+  $("k2e-body").querySelectorAll(".skema,.rangka,.selfmark").forEach(el=>el.classList.remove("hidden"));
+  $("k2e-submit").classList.add("hidden");
+  $("k2e-done").innerHTML="<h2>Mark your own paper</h2>"
+   +"<p class=\"tagline flush\">Compare your answers with the schemes above, then enter your mark for each question. "
+   +"Section B counts your better essay only.</p>"
+   +"<div class=\"nav\"><button class=\"act\" id=\"k2e-total\">Calculate total marks</button></div><div id=\"k2e-out\"></div>";
+  $("k2e-done").classList.remove("hidden");
+  $("k2e-total").onclick=tallyPaper2;
+  window.scrollTo(0,0);
+}
+function readMark(uid){
+  const el=$(uid+"-sm").querySelector("input");
+  const max=+el.dataset.max;
+  return Math.min(max, Math.max(0, +el.value||0));
+}
+function tallyPaper2(){
+  let a=0;
+  for(let i=0;i<ex2A.length;i++) a+=readMark("ea"+i);
+  const bs=[readMark("eb0"), readMark("eb1")];
+  const b=Math.max(bs[0],bs[1]);
+  const c=readMark("ec0");
+  const k2=a+b+c;
+  let h="<h2>Paper 2 result</h2><table>"
+   +"<tr><td>Section A</td><td class=\"n\">"+a+"/60</td></tr>"
+   +"<tr><td>Section B (better essay)</td><td class=\"n\">"+b+"/20</td></tr>"
+   +"<tr><td>Section C</td><td class=\"n\">"+c+"/20</td></tr>"
+   +"<tr><td><b>Paper 2 total</b></td><td class=\"n\"><b>"+k2+"/100</b></td></tr></table>";
+  if(k1Score!==null){
+    const tot=k1Score+k2, pct=Math.round(tot/140*100);
+    h+="<h2>Paper 1 and Paper 2 combined</h2><table>"
+     +"<tr><td>Paper 1</td><td class=\"n\">"+k1Score+"/40</td></tr>"
+     +"<tr><td>Paper 2</td><td class=\"n\">"+k2+"/100</td></tr>"
+     +"<tr><td><b>Total</b></td><td class=\"n\"><b>"+tot+"/140</b></td></tr></table>"
+     +"<p class=\"score\">"+pct+"<small>%</small></p><p class=\"grade\">"+gradeOf(pct)+"</p>"
+     +"<p class=\"tagline flush\">The real SPM grade also takes Paper 3, the practical test, into account, which is not covered here.</p>";
+  } else {
+    h+="<p class=\"score\">"+k2+"<small>%</small></p><p class=\"grade\">"+gradeOf(k2)+" (Paper 2 only)</p>"
+     +"<p class=\"tagline flush\">Sit the full Paper 1 in the same session to see a combined grade out of 140 marks.</p>";
+  }
+  h+="<div class=\"nav\"><button class=\"act\" id=\"k2e-again\">New paper</button></div>";
+  $("k2e-out").innerHTML=h;
+  $("k2e-again").onclick=()=>{
+    $("k2e-done").classList.add("hidden");
+    $("k2e-submit").classList.remove("hidden");
+    $("k2e-run").classList.add("hidden");
+    $("k2e-setup").classList.remove("hidden");
+    window.scrollTo(0,0);
+  };
+}
+
+window.addEventListener("beforeunload", e => { if(examOn){ e.preventDefault(); e.returnValue=""; } });
+</script>
+</body>
+</html>
